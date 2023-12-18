@@ -3,7 +3,7 @@ let intervals = 100
 let count = 0;
 let isatkend = true
 class Fighter{
-    constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo}){
+    constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo,}){
         this.position = position
         this.velocity = velocity
         this.lastpress = lastpress,
@@ -33,17 +33,10 @@ class Fighter{
         if(Player1.canattack && Player1.increm === 670){isatkend = true}
         if(Math.abs(Math.trunc(this.HP)) === 0 && isfinishedP){this.image.src = '../Addons/Sprites/PL1/Death.png'; this.FramesMax = 7; intervals = 1000}
         else{
-        if(Player1.isattack && Player1.canattack && isatkend){ 
-            Player1.image.src = '../Addons/Sprites/PL1/Attack1.png'; 
+        if(this.isattack && this.canattack && isatkend){ 
+            this.image.src = '../Addons/Sprites/PL1/Attack1.png';
             this.FramesMax = 4; intervals = 100; isatkend = false; 
-            if(this.iscombo){
-                console.log('COMBO')
-                this.image.src = '../Addons/Sprites/PL1/Attack2.png';
-                this.iscombo = false
-            }
-            else{
-                console.log('why')
-            }
+            
             }
             
            else if(isatkend){
@@ -63,13 +56,15 @@ class Fighter{
                      else if(Math.trunc(this.position.y/450) === 1 && Math.trunc(this.velocity.y / 15) === 1 && this.velocity.x > 0){this.image.src = '../Addons/Sprites/PL1/Fall.png';console.log('4th jump'); this.FramesMax = 2; intervals = 100}
                 }
 
-            c.drawImage(this.image,this.increm, 70, this.image.width / this.FramesMax, this.image.height, this.position.x - 20, this.position.y - 70, this.width * 10, this.height * 6)
+            c.drawImage(this.image,this.increm, 70, this.image.width / this.FramesMax, this.image.height, this.position.x - 20, this.position.y - 70, this.width * 11, this.height * 6)
 
     }
 
     updat(){
         this.draw()
         //If character t
+
+        console.log(this.velocity.y)
 
             if(!Player1.canattack){
                 
@@ -136,7 +131,7 @@ class Sprite{
 
 
 setInterval(() => {
-    if(Math.abs(Math.trunc(Player1.HP)) !== 0 && Math.abs(Math.trunc(Player2.HP)) !== 0 ){
+    if(Math.abs(Math.trunc(Player1.HP)) !== 0 && Math.abs(Math.trunc(Player2.HP)) !== 0){
     if(Player1.increm < (jumps + (200*(Player1.FramesMax - 1)))){
     if(Player1.isattack && !isatkend){
         if(Player1.increm === (70 + (200*Player1.FramesMax))){
