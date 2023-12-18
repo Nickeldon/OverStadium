@@ -1,0 +1,78 @@
+
+  
+body{
+    overflow:hidden;
+    background-color: black;
+    margin: 0;
+    max-width: 100%;
+    height: auto;
+    padding: 0;
+    float: inline-start;
+    display: block;
+    position: absolute;
+}
+button{
+    transition: all .5s ease-out;
+}
+button:hover{
+    transform: scale(0.85);
+    cursor: pointer;
+}
+.tr{
+    transition: all .5s ease-out;
+}
+.selection{
+    height: fit-content;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 8%;
+}
+.selection a{
+    width: fit-content;
+    height: 23px;
+    transform: perspective(200px);
+    color: #8c8308;
+    text-decoration: none;
+    font-family: PixelifySans, sans-serif;
+    font-size: 22px;
+    padding-bottom: 25px;
+    display: block;
+    transition: all .3s ease-out;
+    letter-spacing: 2px;
+}   
+.selection a:hover{
+    color: #136377;
+    letter-spacing: 4.5px;
+    cursor: pointer;
+}
+.title{
+    width: 100%;
+    top: 60px;
+    left: 60%;
+    align-self: flex-end;
+    float: right;
+    position: absolute;
+    display: block;
+
+}
+h1{
+    font-family: PixelifySans, sans-serif;            
+    -webkit-text-stroke: 2px black; 
+    font-size: 70px;
+    color: rgb(87, 87, 87);
+    align-self: flex-end;
+    float: right;
+    position: absolute;
+}
+hr{
+    color: white;
+    background-color: white;
+    display: block;
+    position: absolute;
+    height: 7px;
+    width: 100%;
+}
+.param{
+    transition: all .5s ease-out;
+}

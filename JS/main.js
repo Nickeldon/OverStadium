@@ -11,6 +11,8 @@ let isfinishedT = false
 let isfinishedP = false
 let alertcounter = 0
 let alrtcount2 = 0
+let jumpcount1 = 0
+let jumpcount2 = 0
 const c = canvas.getContext('2d')
 var SRCPl1 = '../Addons/Sprites/PL1/Idle.png'
 var SRCPl2 = '../Addons/Sprites/PL1/Idle.png'
@@ -79,7 +81,8 @@ isattack: false,
 increm: 70,
 canattack:true,
 lastattack: false,
-iscombo:false
+iscombo:false,
+Framescount: 0
 }
 )
 
@@ -102,7 +105,8 @@ HP: 100,
 imageSRC: SRCPl2,
 FramesMax:1,
 isattack: false,
-increm: 70
+increm: 70,
+Framescount: 0
 })
 
 //KEY HANDLERS 
@@ -122,14 +126,21 @@ window.addEventListener('keydown', (event) => {
     switch(key){
         case 'w': {
             //jump
-            
+            if(jumpcount1 >= 2 && Player1.velocity.y === 0) jumpcount1 = 0
+            if(jumpcount1 < 2 || Player1.velocity.y === 0){
+                jumpcount1++
+            if(Player1.position.y >= 0){
+            if(Player1.velocity.y !== 0){
+                Player1.velocity.y = -15
+            }else Player1.velocity.y = -20
+            console.log('true')
+            Player1.increm = 70
             gravityaccy = 0.7
             bool.w.press = true
             Player1.lastpress = 'w'
-            
+            }}
         }break;
         case 'a': {
-            
             bool.a.press = true
             Player1.lastpress = 'a'
             
@@ -140,32 +151,18 @@ window.addEventListener('keydown', (event) => {
         }break;
 
         case 'd': {
-            
             bool.d.press = true
             Player1.lastpress = 'd'
         }break;
 
         case 'e': {
             //Up Attack
-            if(Player1.canattack && atkcount < 5){
-            Player1.lastattack = Date.now()
-            Player1.isattack = true
-            cooldown = 0
+            if(!Player1.isattack){
             bool.e.press = true
-            Player1.increm = 70
-            counter++
+            Player1.isattack = true;
             Player1.lastpress = 'e'
-            atkcount++
-            console.log('YES')
-            }else{
-                console.log('DO \n NOT \n SPAM!!!!!!!!!!!!!', atkcount, Player1.canattack)
-                Player1.canattack = false
-                Player1.isattack = false
-            }
-            if(gravityaccy > 0.7){
-                console.log('combo')
-                Player1.iscombo = true
-            }
+            Player1.Framescount = 0
+            Player1.increm = 70}
         }break;
         
         case 'Enter': {
@@ -188,9 +185,19 @@ window.addEventListener('keydown', (event) => {
             gravityaccy += 1
         }break;
         case ' ' :{
-            bool.sp.press = true
-            Player2.lastpress = '_'
-            gravityaccy = 0.9
+            if(jumpcount2 >= 2 && Player2.velocity.y === 0) jumpcount2 = 0
+            if(jumpcount2 < 2 || Player2.velocity.y === 0){
+                jumpcount2++
+            if(Player2.position.y >= 0){
+                if(Player2.velocity.y !== 0){
+                    Player2.velocity.y = -15
+                }else Player2.velocity.y = -20
+                console.log('true')
+                Player2.increm = 70
+                gravityaccy = 0.9
+                bool.sp.press = true
+                Player2.lastpress = '_'
+                }}
             
         }break;
 
@@ -232,6 +239,7 @@ window.addEventListener('keyup', (event) => {
             Player1.increm = 70
             bool.d.press = false
             Player1.velocity.x = 0
+            Player1.FramesMax = 8;
         }break;
 
         case 'e': {
