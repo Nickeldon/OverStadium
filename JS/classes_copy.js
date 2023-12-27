@@ -1,11 +1,9 @@
-const jumps = 70
 let intervals = 100
 let count = 0;
 class Fighter{
-    constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo, Framescount}){
+    constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo, Framescount, Char, jump, ivalue, hit, fall, rotate}){
         this.position = position
         this.velocity = velocity
-        console.log(velocity)
         this.lastpress = lastpress,
         this.width = width,
         this.height = height,
@@ -24,70 +22,126 @@ class Fighter{
         this.canattack = canattack,
         this.lastattack = lastattack,
         this.iscombo = iscombo,
-        this.Framescount = Framescount
+        this.Framescount = Framescount,
+        this.Char = Char,
+        this.jump = jump,
+        this.ivalue = ivalue,
+        this.hit = hit,
+        this.fall = fall,
+        this.rotate = rotate
     }
 
     draw(){
+        var metadata = Skin(this.Char)
+        var incy = metadata[5];
+        var offset = metadata[6]
+        if(this.hit){
+            this.image.src = metadata[0].hit
+            this.FramesMax = metadata[1].hit
+            this.jump = metadata[4]
+            this.ivalue = metadata[3]
+            console.log(this.Framescount, this.FramesMax)
+            if(this.Framescount >= this.FramesMax - 1){
+                console.log('yes')
+                this.Framescount = 0;
+                this.hit = false
+            }
+        }
+        else{
+            var verif = Math.trunc(Date.now() / this.lastattack)
+            if(verif >= 1 && verif <= 5 && this.isattack){ console.log('combo', verif); this.lastattack = 0}
 
-        
             if(this.isattack){
-                console.log(this.Framescount)
-                this.image.src = '../Addons/Sprites/PL2/Attack1.png'
+                this.image.src = metadata[0].attack;
+                this.FramesMax = metadata[1].attack
+                this.jump = metadata[4]
+                this.ivalue = metadata[3]
                 this.canattack = false;
-                this.FramesMax = 6
-                if(this.Framescount === this.FramesMax - 1){
+                if(this.Framescount === this.FramesMax){
+                    this.lastattack = Date.now()
                     this.Framescount = 0;
                     this.isattack = false;
                     this.canattack = true;
                 }
             }else{
                 if(this.velocity.x === 0 && this.velocity.y === 0){
-                    this.image.src = '../Addons/Sprites/PL2/Idle.png'
-                    this.FramesMax =  8
+                    this.image.src = metadata[0].idle;
+                    this.FramesMax = metadata[1].idle;
+                    this.jump = metadata[4]
+                    this.ivalue = metadata[3]
                     if(this.Framescount === this.FramesMax - 1){
                         this.Framescount = 0
                     }
                 }
 
                 else if(this.velocity.x !== 0 && this.velocity.y === 0){
-                    this.image.src = '../Addons/Sprites/PL2/Run.png';
-                    this.FramesMax = 8;
+                    this.image.src = metadata[0].run;
+                    this.FramesMax = metadata[1].run;
+                    this.jump = metadata[4]
+                    this.ivalue = metadata[3]
+                    if(this.Char === 'PL3'){
+                        console.log('yes')
+                        this.ivalue = 48;
+                        this.jump = 158;
+                    }
                     if(this.Framescount === this.FramesMax - 1){
                         this.Framescount = 0
                     }
-
                  
                 }
                 else if(this.velocity.y !== 0){
                     if(Math.trunc(this.velocity.y) <= 0 ){
-                        this.image.src = '../Addons/Sprites/PL2/Jump.png';
-                        this.FramesMax = 2;
+                        this.image.src = metadata[0].jump;
+                        
+                        this.FramesMax = metadata[1].jump;
                     }
                     else if(Math.trunc(this.velocity.y) > 0){
-                        this.image.src = '../Addons/Sprites/PL2/Fall.png';
-                        this.FramesMax = 2
+                        this.jump = metadata[4]
+                        this.ivalue = metadata[3]
+                        
+                        this.image.src = metadata[0].fall;
+                        this.FramesMax = metadata[1].fall
                     }
                     
                 if(this.Framescount === this.FramesMax - 1){
                     this.Framescount = 0
                 }
                 }
+            }}
+
+            if(this.rotate){
+                var deg = 360
+                c.save()
+                c.translate(this.position.x + this.width/2, this.position.y + this.height/2)
+                var rad = 2 * Math.PI - deg * Math.PI / 180;    
+                c.rotate(rad);
+                c.scale(-1, 1);
+                c.drawImage(this.image, this.increm, 40, this.image.width / this.FramesMax, this.image.height, -this.width/2 - 100, -this.height/2 - (incy + offset), this.width*10, this.height* 6)
+                c.restore()
             }
-
+            else c.drawImage(this.image,this.increm, 40, this.image.width / this.FramesMax, this.image.height, this.position.x, this.position.y - (incy), this.width * 11, this.height * 6)
             
-            c.drawImage(this.image,this.increm, 40, this.image.width / this.FramesMax, this.image.height, this.position.x - 20, this.position.y - 130, this.width * 11, this.height * 6)
-
     }
 
     updat(){
         this.draw()
         //If character t
-
+        this.fall.x = Math.trunc(this.fall.x)
+        this.fall.y = Math.trunc(this.fall.y)
             this.position.y += this.velocity.y
             this.position.x += this.velocity.x
+            this.position.x += this.fall.x
             if(this.position.y >= 450){this.velocity.y = 0; this.position.y = 450}
             else{
                 this.velocity.y += gravityaccy
+            }
+
+            if(this.fall.x !== 0){
+                if(this.fall.x < 0){
+                this.fall.x += gravityaccx}
+                else{
+                    this.fall.x -= gravityaccx
+                }
             }
             
             if(this.position.x < 0){
@@ -122,7 +176,7 @@ class Sprite{
 
     draw(){
         try{
-        c.drawImage(this.image, this.position.x, this.position.y )}catch(e){}
+        c.drawImage(this.image, this.position.x, this.position.y, this.image.width*1.5, this.image.height*1.5 )}catch(e){}
 }
     updat(){
         this.draw()
@@ -133,20 +187,23 @@ class Sprite{
 
 
 setInterval(() => {
-    if(Player1.increm < (jumps + (200*(Player1.FramesMax - 1)))){
+    //console.log(Player1.increm, Player1.jump, Player1.ivalue)
+    if(!isfinishedP && !isfinishedT && !ispaused){
+    if(Player1.increm < (Player1.ivalue + (Player1.jump*(Player1.FramesMax - 1)))){
         
         Player1.Framescount++
-        if(Player1.increm === (70 + (200*Player1.FramesMax))){
-        }else{
+        if(Player1.increm === (Player1.ivalue + (Player1.jump*Player1.FramesMax))){
+            Player1.increm += Player1.jump
         }
     
-    Player1.increm += 200}
-    else Player1.increm = 70
+    Player1.increm += Player1.jump}
+    else {Player1.increm = Player1.ivalue;}
 
-    if(Player2.increm < (jumps + (200*(Player2.FramesMax - 1)))){
-    Player2.increm += 200
+    if(Player2.increm < (Player2.ivalue + (Player2.jump*(Player2.FramesMax - 1)))){
+    Player2.Framescount++
+    Player2.increm += Player2.jump
     }
-    else Player2.increm = 70
+    else Player2.increm = Player2.ivalue    }
 
 }, intervals)
 

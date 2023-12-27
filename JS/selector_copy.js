@@ -2,8 +2,8 @@ console.log('HELLO')
 const canv = document.querySelector('canvas')
 const ctx = canv.getContext('2d')
 let src = null
-let choice1 = 'PY1'
-let choice2 = 'PY1'
+let choice1 = 'PY4'
+let choice2 = 'PY4'
 document.getElementById('label1').innerHTML = 'Erige'
 document.getElementById('label2').innerHTML = 'Erige'
 
@@ -26,27 +26,10 @@ class choice {
         this.factor = factor
     }
     draw(){
-        //INITIAL = 48; JUMP = 167
         ctx.drawImage(this.image,this.increm.x, this.increm.y, this.image.width / this.FramesMax, this.image.height, this.position.x - 20, this.position.y - 70, this.width * this.factor.x, this.height * this.factor.y)
     }
-    draw2(){
-        var deg = 360
-        ctx.save()
-        ctx.translate(this.position.x + this.width/2, this.position.y + this.height/2)
-        var rad = 2 * Math.PI - deg * Math.PI / 180;    
-        ctx.rotate(rad);
-
-        ctx.scale(-1, 1);
-
-        ctx.drawImage(this.image, this.increm.x, this.increm.y, this.image.width / this.FramesMax, this.image.height, -this.width/2 - 100, -this.height/2 - 70, this.width*10, this.height* 6)
-        ctx.restore()
-
-    }
-    updatePL1(){
+    update(){
         this.draw()
-    }
-    updatePL2(){
-        this.draw2()
     }
 }
 
@@ -301,11 +284,11 @@ function animate(){
             Player1.FramesMax = 8
         }break;
         case 'PY3': {
-            Player1.image.src = '../Addons/Sprites/PL3/Run.png'
-            Player1.FramesMax = 8
+            Player1.image.src = '../Addons/Sprites/PL3/Idle.png'
+            Player1.FramesMax = 10
         }break;
         case 'PY4': {
-            Player1.image.src = '../Addons/Sprites/PL4/Idle.png'
+            Player1.image.src = '../Addons/Sprites/PL4/Jump.png'
             Player1.FramesMax = 8
         }break;
         default:{
@@ -336,7 +319,7 @@ function animate(){
         }
     } 
 
-    Player1.updatePL1()
-    Player2.updatePL2()
+    Player1.update()
+    Player2.update()
 }
 animate()
