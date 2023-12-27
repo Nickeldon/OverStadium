@@ -5,6 +5,7 @@
 </style>
 <head>
     <meta name="viewport" content="width=1024px, initial-scale=1.0,user-scalable=no">
+
     <meta charset="UTF-8" />
    
     <link rel="stylesheet" href="./styles/mainstyles.css">
@@ -12,9 +13,9 @@
     
 </head>
 <body>
-    <audio src="/Addons/select.mp3" class="#selectaudio"></audio>
+    <audio src="./Addons/hover.mp3" id="hoveraudio"></audio>
     <div style="height: 100%; display: flex; position: relative; width: 100%; background-color: gray; border-width: 5px; border-radius: 5px; border-color: white; border-style: solid;" id="main">
-        <img src="./Addons/Background/gradient.png" alt="">
+        <img src="./Addons/Background/gradient.png" alt="" style="width: 100%;">
         <div class="title">
             <h1 style="display: block;">OVERFATE</h1>
         </div>
@@ -23,12 +24,13 @@
        
 
         <div class="selection">
-            <a onclick="redirect(1)">Arcade</a>
-            <a onclick="redirect(2)">Test your OVERFATE</a>
-            <a onclick="redirect(3)">Options</a>
-            <a onclick="redirect(4)">Credits</a>
-            <a onclick="redirect(5)">Quit the Game</a>
+            <a onclick="redirect(1)" onmouseover="PlaySound()">Versus</a>
+            <a onclick="redirect(2)" onmouseover="PlaySound()">Test your OVERFATE</a>
+            <a onclick="redirect(3)" onmouseover="PlaySound()">Options</a>
+            <a onclick="redirect(4)" onmouseover="PlaySound()">Credits</a>
+            <a onclick="redirect(5)" onmouseover="PlaySound()">Quit the Game</a>
         </div>
+
         <div class="param" id="options" style="display: none; position: absolute; width: 100%; height: 100%; background-color: rgb(46, 34, 34); align-items: center; justify-content: center; "> 
         <h1 style="display: block; top: 0; text-align: center;">OPTIONS</h1>
 
@@ -37,14 +39,40 @@
             </button>
 
         <div class="optselect">
-            <a href="">Show FPS</a>
+            <a onclick="parameters(1)">Show FPS: <span style="color: #8c8308;" id="fps-box">no</span></a>
+            <a onclick="parameters(2)" style="position: absolute;">Timer: <span style="color: #8c8308;" id="time-choice">100</span> <span style="color: #8c0808;" id="time-choice"> sec</span></a>
+            
         </div>
         </div>
-      
+        <div class="sp-thanks" id="sp-thanks" style="display: none; position: absolute; width: 100%; height: 100%; background-color: rgb(46, 34, 34); top: 0;">
+        
+            <button style="display: flex; position: absolute; float: left; justify-self: start; top: 5%; left: 4%; background-color: transparent; border-width: 0; justify-content: center; align-items: center;">
+                <img src="./Addons/Back-arrow.png" alt="" style="height: 50px; vertical-align: middle;" onclick="redirect(6)">
+                </button>
+            
+            <div>
+                <h1 style="left: 8%; top: 8%;">Credits</h1><br>
+    
+        <div style="display: block; position: absolute; top: 35%; left: 15%;" class="sp" id="sp">
+            <h2>Special thanks to:</h2>
+            <h4 id="sp-txt">
+                Design Ideas: CharlieDelta45
+            </h4>
+            <h4 id="sp-txt">
+                Coding: ニッケルドン
+            </h4>
+            <h4 id="sp-txt">
+                Design: ニッケルドン
+            </h4>
+        </div>
+            </div>
+        </div>
+        <div id="transition" class="tr" style="display: none; position: absolute; top: 0; width: 100%; height: 100%; background-color: transparent;"></div>
+
     </div>
     
-    <div id="transition" class="tr" style="display: none; position: absolute; top: 0; width: 100%; height: 100%; background-color: transparent;"></div>
-
+    
+   
 </body>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
@@ -65,11 +93,80 @@ $("#selectaudio").attr("id", "beep-0"); // get first one into naming convention
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
 <script>
+    document.querySelector('h4').style.color = '#8c8308'
+    setInterval(() => {
+        if(document.getElementById('sp-thanks').style.display !== 'none'){
+            var color = document.getElementById('sp-txt').style.color;
+
+            if(color === 'rgb(140, 131, 8)')document.getElementById('sp-txt').style.color = '#136377'
+            else if(color === 'rgb(19, 99, 119)') document.getElementById('sp-txt').style.color = '#8c8308'
+        }
+    }, 500)
+
+    var json = fetch('./JS/Options.json')
+    .then((res) => res.json())
+    .then((json) => {return json})
+
+    json = json.then((value) => {
+        return (value)
+    })
+
+    //HOVER SOUNDS
+    function PlaySound(soundobj) {
+  var thissound = document.getElementById('hoveraudio');
+
+  var hover = new Howl({
+      src: ['./Addons/hover.mp3'],
+      volume: 0.1,
+      onend: function () {
+        
+      }
+    });
+    
+    hover.play();
+  
+}
+
+function StopSound(soundobj) {
+  var thissound = document.getElementById('hoveraudio');
+  thissound.pause();
+  thissound.currentTime = 0;
+}
+    
+
+    function parameters(num){
+        if(num === 1){
+            var fpschoice = document.getElementById('fps-box').innerText
+            if(fpschoice === 'no'){
+                document.getElementById('fps-box').innerHTML = 'yes'
+
+            }else{
+                document.getElementById('fps-box').innerText = 'no'
+            }
+        }
+        else if(num === 2){
+            var timein = document.getElementById('time-choice').innerText
+            switch(timein){
+                case '100': {
+                    document.getElementById('time-choice').innerText = '150'
+                }break;
+                case '150': {
+                    document.getElementById('time-choice').innerText = '300'
+                }break;
+                case '300': {
+                    document.getElementById('time-choice').innerText = 'unlimited'
+                }break;
+                case 'unlimited': {
+                    document.getElementById('time-choice').innerText = '100'
+                }break;
+            }
+        }
+    }
     
     function redirect(num){
         var sound = new Howl({
       src: ['./Addons/select.mp3'],
-      volume: 0.5,
+      volume: 0.1,
       onend: function () {
         console.log("continue", num)
         if(num === 1){
@@ -82,6 +179,16 @@ $("#selectaudio").attr("id", "beep-0"); // get first one into naming convention
             document.getElementById('transition').style.display = 'none'
             document.getElementById('options').style.display = 'flex'
     }
+    else if(num === 4){
+        document.getElementById('transition').style.display = 'none'
+        document.getElementById('sp-thanks').style.display = 'flex'
+    }
+    else if(num === 5){
+        document.getElementById('transition').style.backgroundColor = 'black'
+        setTimeout(() => {
+            window.close()
+        }, 1000)
+    }
       }
     });
         if(num < 6){
@@ -90,6 +197,7 @@ $("#selectaudio").attr("id", "beep-0"); // get first one into naming convention
         }
         else{
             if(num === 6){
+                document.getElementById('sp-thanks').style.display = 'none'
                 document.getElementById('options').style.display = 'none'
             }
         }
