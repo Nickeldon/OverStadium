@@ -1,18 +1,17 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
-
 const createWindow = () => {
   const win = new BrowserWindow({
+    width: 875,
+    height: 550,
     webPreferences:{
-      preload: path.join(__dirname + '\\mainmen.html')
+      preload: path.join([__dirname + '/Addons/Sprites/PL1/Idle.png',
+                          __dirname + '/Addons/Sprites/PL2/Idle.png'])
     }
   })
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, '\\mainmen.html')
-}));
-}
 
-// in main.js
+  win.loadFile('charsel.html')
+}
 
 app.whenReady().then(() => {
   createWindow()
