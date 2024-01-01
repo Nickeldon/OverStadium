@@ -105,7 +105,37 @@ const Player2 = new choice({
 })
 
 function Bridge(){
-
+    document.getElementById('transition').style.display = 'block'
+    document.getElementById('transition').style.backgroundColor = 'black'
+    if(!choice1) choice1 = 'PL1'
+    if(!choice2) choice2 = 'PL2'
+    var json = {
+        "data": {
+          "P1": choice2,
+          "P2": choice2
+        }}
+        json = JSON.stringify(json)
+        fetch(`http://localhost:8000/request?METADATA=${json}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then(res => {
+            res.json();
+            if(res.status === 404){
+                console.log('COULD NOT FETCH DATA')
+            }
+        })
+        .then(message => {
+            console.log(message);
+            setTimeout(() => {
+                window.location.href = '../index.html'
+            }, 1000)
+            // Handle the response as needed
+          })
+          .catch(error => console.error('Error:', error));
+      
+    
     
     
 }

@@ -125,6 +125,12 @@ class Fighter{
 
     updat(){
         this.draw()
+        if(isfinishedT){
+            gravityaccx = 0;
+            gravityaccy = 0;
+            this.velocity.y = 0;
+            this.velocity.x = 0
+        }
         //If character t
         this.fall.x = Math.trunc(this.fall.x)
         this.fall.y = Math.trunc(this.fall.y)

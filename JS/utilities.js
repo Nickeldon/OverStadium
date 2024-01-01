@@ -7,6 +7,7 @@ let msPrev = window.performance.now()
 const fpslim = 60
 const msPerFrame = 1000 / fpslim
 var TO_RADIANS = Math.PI/180; 
+
 function redirect(num){
     switch(num){
         case 1 : {
@@ -26,6 +27,26 @@ function redirect(num){
                 window.location.href = '../mainmen.html'
             }, 1000)
         }break;
+
+        case 5 : {
+            //CHANGE CHARACTER
+            
+            document.getElementById('transition').style.display = 'block'
+            document.getElementById('transition').style.backgroundColor = 'black'
+            document.getElementById('transition').style.opacity = '100%'
+            setTimeout(() => {
+                window.location.href = '../charsel.html'
+            }, 1000)
+
+        }break;
+
+        case 6 : {
+
+        }break;
+
+        case 7 : {
+
+        }break;
     }
 }
 
@@ -34,7 +55,23 @@ setInterval(function () {
     if(document.getElementById('timer').innerHTML > 0 && !isfinishedP && !isfinishedT && !ispaused){document.getElementById('timer').innerHTML -= 1}
         if(document.getElementById('timer').innerHTML === '0' && alertcounter === 0){
             alertcounter++
-            alert('TIME\'S UP!!')
+            document.getElementById('alttime').style.display = 'flex'
+            let count = -95
+            setInterval(() => {
+                if(count < 14){
+                    count++
+                    document.getElementById('timetxt').style.left = `${count}%`
+                }
+                else if(count === 14){
+                    
+                    setTimeout(() => {
+                        document.getElementById('transition').style.display = 'block'
+                        document.getElementById('transition').style.opacity = '50%'
+                        document.getElementById('transition').style.backgroundColor = 'black'
+                        document.getElementById('TimeAlert').style.display = 'block'
+                    }, 3000)
+                }
+            }, 1)
             isfinishedT = true
         }}, 1000)
 
@@ -283,7 +320,7 @@ function anim(){
         if(Player1.position.x <= Player2.position.x + 110 && Player1.position.x >= Player2.position.x || Player1pres === 'touch'){
             if(Player1.position.y <= Player2.position.y + 60){
                 if(Player1.HP > 0){
-                Player1.HP -= 0.3
+                Player1.HP -= 2.0
                 Player1.hit = true
                 Player1.velocity.y = -9;
                 if(Player2.position.x < Player1.position.x){
