@@ -83,7 +83,7 @@ canattack:true,
 lastattack: false,
 iscombo:false,
 Framescount: 0,
-Char: 'PL2',
+Char: 'PL1',
 ivalue: null,
 jump: null,
 hit: false,
@@ -91,7 +91,8 @@ fall: {
     x: 0,
     y: 0,
 },
-rotate: false
+rotate: false,
+directories: null
 }
 )
 
@@ -122,7 +123,8 @@ fall: {
     x: 0,
     y: 0,
 },
-rotate: false
+rotate: false,
+directories: null
 })
 
 
@@ -321,4 +323,12 @@ window.addEventListener('keyup', (event) => {
         }break
     }}
 })
-anim()
+
+let directory
+
+function igniter(meta){
+    directory = meta
+    Player1.directories = meta.P1
+    Player2.directories = meta.P2
+    anim(meta)
+}
