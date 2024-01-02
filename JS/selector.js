@@ -1,9 +1,20 @@
-console.log('HELLO')
+var loader = new PxLoader()
+const directory = {
+    CH1: loader.addImage(`../Addons/Sprites/PL1/Idle.png`),
+    CH2: loader.addImage(`../Addons/Sprites/PL2/Idle.png`),
+    CH3: loader.addImage(`../Addons/Sprites/PL3/Idle.png`),
+    CH4: loader.addImage(`../Addons/Sprites/PL4/Idle.png`),
+    CH5: loader.addImage(`../Addons/Sprites/PL5/Idle.png`)
+}
+
+loader.addCompletionListener(() => {
+animate()
+})
 const canv = document.querySelector('canvas')
 const ctx = canv.getContext('2d')
 let src = null
-let choice1 = 'PY1'
-let choice2 = 'PY1'
+let choice1 = 'PL1'
+let choice2 = 'PL1'
 document.getElementById('label1').innerHTML = 'Erige'
 document.getElementById('label2').innerHTML = 'Erige'
 
@@ -13,10 +24,9 @@ bgimage.src = '../Addons/Background/gradient.png'
 ctx.fillRect(0,0, canv.width, canv.height)
 
 class choice {
-    constructor({position, imageSRC, increm, FramesMax, width, height, jumps, iframe, factor}){
+    constructor({position, increm, FramesMax, width, height, jumps, iframe, factor}){
         this.position = position,
         this.image = new Image(),
-        this.image.src = imageSRC,
         this.increm = increm,
         this.FramesMax = FramesMax,
         this.width = width,
@@ -69,7 +79,6 @@ const Player1 = new choice({
     },
     width: 65,
     height: 130,
-    imageSRC: src,
     FramesMax: 4,
     jumps: 200,
     increm:{
@@ -90,7 +99,6 @@ const Player2 = new choice({
     },
     width: 65,
     height: 130,
-    imageSRC: src,
     FramesMax: 4,
     jumps: 200,
     increm:{
@@ -108,34 +116,17 @@ function Bridge(){
     document.getElementById('transition').style.display = 'block'
     document.getElementById('transition').style.backgroundColor = 'black'
     if(!choice1) choice1 = 'PL1'
-    if(!choice2) choice2 = 'PL2'
+    if(!choice2) choice2 = 'PL1'
     var json = {
         "data": {
-          "P1": choice2,
+          "P1": choice1,
           "P2": choice2
         }}
         json = JSON.stringify(json)
-        fetch(`http://localhost:8000/request?METADATA=${json}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then(res => {
-            res.json();
-            if(res.status === 404){
-                console.log('COULD NOT FETCH DATA')
-            }
-        })
-        .then(message => {
-            console.log(message);
             setTimeout(() => {
-                window.location.href = '../index.html'
+                window.location.href = '../index.html?choice=' + json
             }, 1000)
             // Handle the response as needed
-          })
-          .catch(error => console.error('Error:', error));
-      
-    
     
     
 }
@@ -143,20 +134,20 @@ function Bridge(){
 function selector1(action){
     if(action === 'Arrow-Right'){
         switch(choice1){
-            case 'PY1':{
-                choice1 = 'PY2';
+            case 'PL1':{
+                choice1 = 'PL2';
                 }
                 break;
-            case 'PY2':{
-                choice1 = 'PY3';
+            case 'PL2':{
+                choice1 = 'PL3';
                 }
                 break;
-            case 'PY3':{
-                choice1 = 'PY4'}
+            case 'PL3':{
+                choice1 = 'PL4'}
                 break;
-            case 'PY4':{
-                choice1 = 'PY1'
-                //choice1 = 'PY5'
+            case 'PL4':{
+                choice1 = 'PL1'
+                //choice1 = 'PL5'
             }
                 break;
 
@@ -164,29 +155,29 @@ function selector1(action){
     }
     else{
         switch(choice1){
-            /*case 'PY5':{
-                choice1 = 'PY4'}
+            /*case 'PL5':{
+                choice1 = 'PL4'}
                 break;*/
-            case 'PY4':{
-                choice1 = 'PY3';
+            case 'PL4':{
+                choice1 = 'PL3';
                 }
                 break;
-            case 'PY3':{
-                choice1 = 'PY2';
+            case 'PL3':{
+                choice1 = 'PL2';
                     }
                 break;
-            case 'PY2':{
-                choice1 = 'PY1'}
+            case 'PL2':{
+                choice1 = 'PL1'}
                 break;
-            case 'PY1': {
-                choice1 = 'PY4'
-                //choice2 = 'PY5'
+            case 'PL1': {
+                choice1 = 'PL4'
+                //choice2 = 'PL5'
             }break;
 
         }
     }
     switch(choice1){
-        case 'PY1': {
+        case 'PL1': {
                 Player1.increm.x = 70
                 Player1.increm.y = 70;
                 Player1.iframe = 70;
@@ -195,7 +186,7 @@ function selector1(action){
 
                 document.getElementById('label1').innerHTML = 'Erige'
         }break;
-        case 'PY2': {
+        case 'PL2': {
                 Player1.increm.x = 70
                 Player1.increm.y = 63;
                 Player1.iframe = 70;
@@ -203,7 +194,12 @@ function selector1(action){
                 Player1.factor.x = 11;
                 document.getElementById('label1').innerHTML = 'Kazuya'
         }break;
-        case 'PY3': {
+        case 'PL3': {
+                /*Player1.increm.x = 54;
+                Player1.increm.y = 54;
+                Player1.iframe = 54;
+                Player1.jumps = 162;
+                Player1.factor.x = 11;*/
                 Player1.increm.x = 54;
                 Player1.increm.y = 54;
                 Player1.iframe = 54;
@@ -211,7 +207,7 @@ function selector1(action){
                 Player1.factor.x = 11;
                 document.getElementById('label1').innerHTML = 'Kirei'
         }break;
-        case 'PY4': {
+        case 'PL4': {
                 Player1.factor.x = 10;
                 Player1.increm.x = 48;
                 Player1.increm.y = 54;
@@ -219,7 +215,7 @@ function selector1(action){
                 Player1.jumps = 150;
                 document.getElementById('label1').innerHTML = 'Aisha'
         }break;
-        case 'PY5': {
+        case 'PL5': {
 
         }break;
     }
@@ -228,52 +224,52 @@ function selector1(action){
 function selector2(action){
     if(action === 'Arrow-Right'){
         switch(choice2){
-            case 'PY1':{
-                choice2 = 'PY2';
+            case 'PL1':{
+                choice2 = 'PL2';
                 Player2.increm.x = 70
                 Player2.increm.y = 70}
                 break;
-            case 'PY2':{
-                choice2 = 'PY3';
+            case 'PL2':{
+                choice2 = 'PL3';
                 Player2.increm.x = 70
                 Player2.increm.y = 70}
                 break;
-            case 'PY3':{
-                choice2 = 'PY4';
+            case 'PL3':{
+                choice2 = 'PL4';
                 Player2.increm.x = 53
                 Player2.increm.y = 50;
                 }
                 break;
-            case 'PY4':{
-                //choice2 = 'PY5'
-                choice2 = 'PY1'}
+            case 'PL4':{
+                //choice2 = 'PL5'
+                choice2 = 'PL1'}
                 break;
 
         }
     }
     else{
         switch(choice2){
-            /*case 'PY5':{
-                choice2 = 'PY4'}
+            /*case 'PL5':{
+                choice2 = 'PL4'}
                 break;*/
-            case 'PY4':{
-                choice2 = 'PY3'}
+            case 'PL4':{
+                choice2 = 'PL3'}
                 break;
-            case 'PY3':{
-                choice2 = 'PY2'}
+            case 'PL3':{
+                choice2 = 'PL2'}
                 break;
-            case 'PY2':{
-                choice2 = 'PY1'}
+            case 'PL2':{
+                choice2 = 'PL1'}
                 break;
-            case 'PY1': {
-                choice2 = 'PY4'
-                //choice2 = 'PY5'
+            case 'PL1': {
+                choice2 = 'PL4'
+                //choice2 = 'PL5'
             }break;
 
         }
     }
     switch(choice2){
-        case 'PY1': {
+        case 'PL1': {
                 Player2.increm.x = 70
                 Player2.increm.y = 70;
                 Player2.iframe = 70;
@@ -281,7 +277,7 @@ function selector2(action){
                 Player2.factor.x = 11;
                 document.getElementById('label2').innerHTML = 'Erige'
         }break;
-        case 'PY2': {
+        case 'PL2': {
                 Player2.increm.x = 70
                 Player2.increm.y = 63;
                 Player2.iframe = 70;
@@ -289,7 +285,7 @@ function selector2(action){
                 Player2.factor.x = 11;
                 document.getElementById('label2').innerHTML = 'Kazuya'
         }break;
-        case 'PY3': {
+        case 'PL3': {
                 Player2.increm.x = 54;
                 Player2.increm.y = 54;
                 Player2.iframe = 54;
@@ -297,7 +293,7 @@ function selector2(action){
                 Player2.factor.x = 11;
                 document.getElementById('label2').innerHTML = 'Kirei'
         }break;
-        case 'PY4': {
+        case 'PL4': {
                 Player2.factor.x = 10;
                 Player2.increm.x = 48
                 Player2.increm.y = 54;
@@ -305,7 +301,7 @@ function selector2(action){
                 Player2.jumps =  150;
                 document.getElementById('label2').innerHTML = 'Aisha'
         }break;
-        case 'PY5': {
+        case 'PL5': {
 
         }break;
     }
@@ -320,22 +316,22 @@ function animate(){
     ctx.drawImage(bgimage, 0, 0)
 
     switch(choice1){
-        case 'PY1': {
-            Player1.image.src  = '../Addons/Sprites/PL1/Idle.png'
+        case 'PL1': {
+            Player1.image  = directory.CH1
             Player1.FramesMax = 4;
             Player1.position.x = 210,
             Player1.position.y = 218
         }break;
-        case 'PY2': {
-            Player1.image.src = '../Addons/Sprites/PL2/Idle.png'
+        case 'PL2': {
+            Player1.image = directory.CH2
             Player1.FramesMax = 8
         }break;
-        case 'PY3': {
-            Player1.image.src = '../Addons/Sprites/PL3/Run.png'
-            Player1.FramesMax = 8
+        case 'PL3': {
+            Player1.image = directory.CH3
+            Player1.FramesMax = 10
         }break;
-        case 'PY4': {
-            Player1.image.src = '../Addons/Sprites/PL4/Idle.png'
+        case 'PL4': {
+            Player1.image = directory.CH4
             Player1.FramesMax = 8
         }break;
         default:{
@@ -343,22 +339,22 @@ function animate(){
         }
     } 
     switch(choice2){
-        case 'PY1': {
-            Player2.image.src  = '../Addons/Sprites/PL1/Idle.png'
+        case 'PL1': {
+            Player2.image  = directory.CH1
             Player2.FramesMax = 4
             Player2.position.x = 645,
             Player2.position.y = 218
         }break;
-        case 'PY2': {
-            Player2.image.src = '../Addons/Sprites/PL2/Idle.png'
+        case 'PL2': {
+            Player2.image = directory.CH2
             Player2.FramesMax = 8
         }break;
-        case 'PY3': {
-            Player2.image.src = '../Addons/Sprites/PL3/Idle.png'
+        case 'PL3': {
+            Player2.image = directory.CH3
             Player2.FramesMax = 10
         }break;
-        case 'PY4': {
-            Player2.image.src = '../Addons/Sprites/PL4/Idle.png'
+        case 'PL4': {
+            Player2.image = directory.CH4
             Player2.FramesMax = 8
         }break;
         default:{
@@ -369,4 +365,5 @@ function animate(){
     Player1.updatePL1()
     Player2.updatePL2()
 }
-animate()
+
+loader.start()

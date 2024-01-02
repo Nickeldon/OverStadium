@@ -284,7 +284,7 @@ function anim(meta){
         if(Player2.position.x <= Player1.position.x + 210 && Player2.position.x >= Player1.position.x || Player2pres === 'touch'){
             if(Player2.position.y <= Player1.position.y + 60){
                 if(Player2.HP > 0){
-                Player2.HP -= 1.5
+                Player2.HP -= 0.5
                 Player2.hit = true
                 Player2.velocity.y = -9;
                 if(Player1.Char === 'PL2'){
@@ -314,7 +314,6 @@ function anim(meta){
         }}
         
         counter++
-        Player1.lastpress = ''
         if(counter > 5) bool.e.press = false 
     }
     if(Player2.isattack && bool.ENTER.press){
@@ -327,7 +326,7 @@ function anim(meta){
         if(Player1.position.x <= Player2.position.x + 220 && Player1.position.x >= Player2.position.x || Player1pres === 'touch'){
             if(Player1.position.y <= Player2.position.y + 60){
                 if(Player1.HP > 0){
-                Player1.HP -= 2.0
+                Player1.HP -= 1.5
                 Player1.hit = true
                 Player1.velocity.y = -9;
                 if(Player2.Char === 'PL2'){
