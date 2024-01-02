@@ -298,29 +298,36 @@
         }
                
         getData().then((buffer) => {
-           Player1.Char = buffer.data.P1
-           Player2.Char = buffer.data.P2
+            var urlParams = new URLSearchParams(window.location.search);
+            var metadata = urlParams.get('choice');
+            metadata = JSON.parse(metadata)
+            console.log(metadata)
+           Player1.Char = metadata.data.P1
+           Player2.Char = metadata.data.P2
+           
            var loader = new PxLoader()
 
 //console.log(Player1.Char, Player2.Char)
 const Ply1img = {
-    attack: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Attack1.png`),
-    cmb1: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Attack2.png`),
-    idle: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Idle.png`),
-    jump: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Jump.png`),
-    fall: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Fall.png`),
-    run: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Run.png`),
-    hit: loader.addImage(`../Addons/Sprites/${buffer.data.P1}/Take hit.png`)
+    attack: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Attack1.png`),
+    cmb1: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Attack2.png`),
+    cmb2: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Attack3.png`) || null,
+    idle: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Idle.png`),
+    jump: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Jump.png`),
+    fall: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Fall.png`),
+    run: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Run.png`),
+    hit: loader.addImage(`../Addons/Sprites/${metadata.data.P1}/Take hit.png`)
 }
 
 const Ply2img = {
-attack: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Attack1.png`),
-cmb1: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Attack2.png`),
-idle: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Idle.png`),
-jump: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Jump.png`),
-fall: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Fall.png`),
-run: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Run.png`),
-hit: loader.addImage(`../Addons/Sprites/${buffer.data.P2}/Take hit.png`)
+attack: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Attack1.png`),
+cmb1: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Attack2.png`),
+cmb2: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Attack3.png`) || null,
+idle: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Idle.png`),
+jump: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Jump.png`),
+fall: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Fall.png`),
+run: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Run.png`),
+hit: loader.addImage(`../Addons/Sprites/${metadata.data.P2}/Take hit.png`)
 }
 Player1.images = Ply1img;
 Player2.images = Ply1img
