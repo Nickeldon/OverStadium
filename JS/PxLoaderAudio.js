@@ -1,9 +1,9 @@
-// PxLoader plugin to load images
+// PxLoader plugin to load audio elements
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['pxloader'], function(PxLoader) {
-            return (root.PxLoaderImage = factory(PxLoader));
+            return (root.PxLoaderAudio = factory(PxLoader));
         });
     } else if (typeof module === 'object' && module.exports) {
         // Node. Does not work with strict CommonJS, but
@@ -12,29 +12,33 @@
         module.exports = factory(require('pxloader'));
     } else {
         // Browser globals
-        root.PxLoaderImage = factory(root.PxLoader);
+        root.PxLoaderAudio = factory(root.PxLoader);
     }
 }(this, function(PxLoader) {
-    function PxLoaderImage(url, tags, priority, options) {
+    function PxLoaderAudio(url, tags, priority, options) {
         options = options || {};
-        
+
         var self = this,
             loader = null,
-            img;
+            audio;
 
-        img = this.img = new Image();
+        this.readyEventName = 'canplaythrough';
+        
+        audio = this.audio = document.createElement('audio');
+
         if (options.origin) {
-            img.crossOrigin = options.origin;
+            audio.crossOrigin = options.origin;
         }
-
+        audio.preload = 'auto';
+        
         this.tags = tags;
         this.priority = priority;
 
         var onReadyStateChange = function() {
-            if (self.img.readyState !== 'complete') {
+            if (self.audio.readyState !== 4) {
                 return;
             }
-
+            
             onLoad();
         };
 
@@ -47,7 +51,7 @@
             loader.onError(self);
             cleanup();
         };
-        
+
         var onTimeout = function() {
             loader.onTimeout(self);
             cleanup();
@@ -55,8 +59,10 @@
 
         var cleanup = function() {
             self.unbind('load', onLoad);
-            self.unbind('readystatechange', onReadyStateChange);
+            self.unbind(self.readyEventName, onReadyStateChange);
             self.unbind('error', onError);
+            // Force browser to release connection
+            self.audio.src = '';
         };
 
         this.start = function(pxLoader) {
@@ -65,15 +71,20 @@
 
             // NOTE: Must add event listeners before the src is set. We
             // also need to use the readystatechange because sometimes
-            // load doesn't fire when an image is in the cache.
+            // load doesn't fire when an audio is in the cache.
             self.bind('load', onLoad);
-            self.bind('readystatechange', onReadyStateChange);
+            self.bind(self.readyEventName, onReadyStateChange);
             self.bind('error', onError);
 
-            self.img.src = url;
+            // sometimes the browser will intentionally stop downloading
+            // the audio. In that case we'll consider the audio loaded
+            self.bind('suspend', onLoad);
+
+            self.audio.src = url;
+            self.audio.load();
         };
 
-        // called by PxLoader to check status of image (fallback in case
+        // called by PxLoader to check status of audio (fallback in case
         // the event listeners are not triggered).
         this.checkStatus = function() {
             onReadyStateChange();
@@ -81,7 +92,7 @@
 
         // called by PxLoader when it is no longer waiting
         this.onTimeout = function() {
-            if (self.img.complete) {
+            if (self.audio.readyState !== 4) {
                 onLoad();
             } else {
                 onTimeout();
@@ -95,24 +106,24 @@
 
         // cross-browser event binding
         this.bind = function(eventName, eventHandler) {
-            self.img.addEventListener(eventName, eventHandler, false);
+            self.audio.addEventListener(eventName, eventHandler, false);
         };
 
         // cross-browser event un-binding
         this.unbind = function(eventName, eventHandler) {
-            self.img.removeEventListener(eventName, eventHandler, false);
+            self.audio.removeEventListener(eventName, eventHandler, false);
         };
 
     }
 
-    // add a convenience method to PxLoader for adding an image
-    PxLoader.prototype.addImage = function(url, tags, priority, options) {
-        var imageLoader = new PxLoaderImage(url, tags, priority, options);
-        this.add(imageLoader);
+    // add a convenience method to PxLoader for adding audio
+    PxLoader.prototype.addAudio = function(url, tags, priority, options) {
+        var audioLoader = new PxLoaderAudio(url, tags, priority, options);
+        this.add(audioLoader);
 
-        // return the img element to the caller
-        return imageLoader.img;
+        // return the audio element to the caller
+        return audioLoader.audio;
     };
 
-    return PxLoaderImage;
+    return PxLoaderAudio;
 }));

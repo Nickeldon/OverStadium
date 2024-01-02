@@ -1,9 +1,9 @@
-// PxLoader plugin to load images
+// PxLoader plugin to load data
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['pxloader'], function(PxLoader) {
-            return (root.PxLoaderImage = factory(PxLoader));
+            return (root.PxLoaderData = factory(PxLoader));
         });
     } else if (typeof module === 'object' && module.exports) {
         // Node. Does not work with strict CommonJS, but
@@ -12,32 +12,33 @@
         module.exports = factory(require('pxloader'));
     } else {
         // Browser globals
-        root.PxLoaderImage = factory(root.PxLoader);
+        root.PxLoaderData = factory(root.PxLoader);
     }
 }(this, function(PxLoader) {
-    function PxLoaderImage(url, tags, priority, options) {
+    function PxLoaderData(url, tags, priority, options) {
         options = options || {};
-        
+
         var self = this,
-            loader = null,
-            img;
+            loader = null;
 
-        img = this.img = new Image();
-        if (options.origin) {
-            img.crossOrigin = options.origin;
-        }
-
+        // used by the loader to categorize and prioritize
         this.tags = tags;
         this.priority = priority;
 
+        this.xhr = new XMLHttpRequest();
+
         var onReadyStateChange = function() {
-            if (self.img.readyState !== 'complete') {
+            if (self.xhr.readyState !== 4) {
                 return;
             }
 
-            onLoad();
+            if (self.xhr.status === 200 ) {
+                onLoad();
+            } else {
+                onError();
+            }
         };
-
+        
         var onLoad = function() {
             loader.onLoad(self);
             cleanup();
@@ -54,26 +55,25 @@
         };
 
         var cleanup = function() {
-            self.unbind('load', onLoad);
             self.unbind('readystatechange', onReadyStateChange);
             self.unbind('error', onError);
         };
 
-        this.start = function(pxLoader) {
+        // called by PxLoader to trigger download
+        this.start = function( pxLoader ) {
             // we need the loader ref so we can notify upon completion
             loader = pxLoader;
 
-            // NOTE: Must add event listeners before the src is set. We
-            // also need to use the readystatechange because sometimes
-            // load doesn't fire when an image is in the cache.
-            self.bind('load', onLoad);
+            // set up event handlers so we send the loader progress updates
             self.bind('readystatechange', onReadyStateChange);
             self.bind('error', onError);
 
-            self.img.src = url;
+            self.xhr.open('GET', url, true);
+            self.xhr.send(null);
+            self.xhr.responseType = (options.responseType) ? options.responseType : '';
         };
 
-        // called by PxLoader to check status of image (fallback in case
+        // called by PxLoader to check status of request (fallback in case
         // the event listeners are not triggered).
         this.checkStatus = function() {
             onReadyStateChange();
@@ -81,8 +81,13 @@
 
         // called by PxLoader when it is no longer waiting
         this.onTimeout = function() {
-            if (self.img.complete) {
-                onLoad();
+            // must report a status to the loader: load, error, or timeout
+            if (self.xhr.readyState === 4) {
+                if (self.xhr.status === 200) {
+                    onLoad();
+                } else {
+                    onError();
+                }
             } else {
                 onTimeout();
             }
@@ -95,24 +100,24 @@
 
         // cross-browser event binding
         this.bind = function(eventName, eventHandler) {
-            self.img.addEventListener(eventName, eventHandler, false);
+            self.xhr.addEventListener(eventName, eventHandler, false);
         };
 
         // cross-browser event un-binding
         this.unbind = function(eventName, eventHandler) {
-            self.img.removeEventListener(eventName, eventHandler, false);
+            self.xhr.removeEventListener(eventName, eventHandler, false);
         };
-
     }
 
-    // add a convenience method to PxLoader for adding an image
-    PxLoader.prototype.addImage = function(url, tags, priority, options) {
-        var imageLoader = new PxLoaderImage(url, tags, priority, options);
-        this.add(imageLoader);
+    // add a convenience method to PxLoader for adding a data
+    PxLoader.prototype.addData = function(url, tags, priority, options) {
+        var dataLoader = new PxLoaderData(url, tags, priority, options);
 
-        // return the img element to the caller
-        return imageLoader.img;
+        this.add(dataLoader);
+
+        // return the request object to the caller
+        return dataLoader.xhr;
     };
 
-    return PxLoaderImage;
+    return PxLoaderData;
 }));

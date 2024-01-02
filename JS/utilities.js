@@ -55,7 +55,7 @@ setInterval(function () {
     if(document.getElementById('timer').innerHTML > 0 && !isfinishedP && !isfinishedT && !ispaused){document.getElementById('timer').innerHTML -= 1}
         if(document.getElementById('timer').innerHTML === '0' && alertcounter === 0){
             alertcounter++
-            document.getElementById('alttime').style.display = 'flex'
+            document.getElementById('alttime').style.display = 'block'
             let count = -95
             setInterval(() => {
                 if(count < 14){
@@ -100,9 +100,7 @@ function refreshLoop() {
   
   refreshLoop();
 
-        function RESTART(){
-            location.reload()
-        }
+        
     let bgcount = 0
 setInterval(() => {
     if(bgcount < 4){
@@ -113,10 +111,6 @@ setInterval(() => {
 
 /////////////////////////////////// PXLOADER
 
-var loader = new PxLoader(), 
-    backgroundImg = loader.addImage('images/headerbg.jpg'), 
-    treesImg = loader.addImage('images/trees.png'), 
-    ufoImg = loader.addImage('images/ufo.png'); 
 
 function Skin(char){
     var image;
@@ -203,7 +197,9 @@ return [image, Frames, inc, ival, jumping, yi, offsety]
 }
 
 
-function anim(){
+function anim(meta){
+    Player1.images = meta.P1
+    Player2.images = meta.P2
     window.requestAnimationFrame(anim)
 
     //Request 60FPS limit
@@ -279,18 +275,27 @@ function anim(){
         }
     }
     
-    if(bool.e.press && Player1.lastpress === 'e' && Player1.isattack){
-        if(Player2.position.x >= Player1.position.x - 110 && Player2.position.x <= Player1.position.x && Player2pres === 'l'){Player2pres = 'touch'}
+    if(Player1.isattack){
+
+        if(Player2.position.y >= Player1.position.y - 220){
+        if(Player2.position.x >= Player1.position.x - 205 && Player2.position.x <= Player1.position.x && Player2pres === 'l'){Player2pres = 'touch'}
 
         
-        if(Player2.position.x <= Player1.position.x + 185 && Player2.position.x >= Player1.position.x || Player2pres === 'touch'){
+        if(Player2.position.x <= Player1.position.x + 210 && Player2.position.x >= Player1.position.x || Player2pres === 'touch'){
             if(Player2.position.y <= Player1.position.y + 60){
                 if(Player2.HP > 0){
                 Player2.HP -= 1.5
                 Player2.hit = true
                 Player2.velocity.y = -9;
-                if(Player1.position.x < Player2.position.x){
-                Player2.fall.x = 9} else Player2.fall.x = -9
+                if(Player1.Char === 'PL2'){
+                    setTimeout(() => {
+                        if(Player1.position.x < Player2.position.x){
+                            Player2.fall.x = 9} else Player2.fall.x = -9
+                    }, 50)
+                }else{
+                    if(Player1.position.x < Player2.position.x){
+                        Player2.fall.x = 9} else Player2.fall.x = -9
+                }
                 if(Player2.HP <= 30){
                     document.getElementById('ri').style.backgroundColor = 'rgb(130, 16, 16)'
                 }
@@ -306,25 +311,34 @@ function anim(){
                 }
                 
             }
-        }
+        }}
         
         counter++
         Player1.lastpress = ''
         if(counter > 5) bool.e.press = false 
     }
-    if(bool.ENTER.press && Player2.lastpress === 'ENTER'){
+    if(Player2.isattack && bool.ENTER.press){
         atk = 1
         
-        if(Player2.position.x - 110 <= Player1.position.x && Player2.position.x >= Player1.position.x ){Player1pres = 'touch'}
+        if(Player1.position.y >= Player2.position.y - 220){
+            console.log(Player1.position.y, Player2.position.y)
+        if(Player2.position.x - 225 <= Player1.position.x && Player2.position.x >= Player1.position.x ){Player1pres = 'touch'}
 
-        if(Player1.position.x <= Player2.position.x + 110 && Player1.position.x >= Player2.position.x || Player1pres === 'touch'){
+        if(Player1.position.x <= Player2.position.x + 220 && Player1.position.x >= Player2.position.x || Player1pres === 'touch'){
             if(Player1.position.y <= Player2.position.y + 60){
                 if(Player1.HP > 0){
                 Player1.HP -= 2.0
                 Player1.hit = true
                 Player1.velocity.y = -9;
-                if(Player2.position.x < Player1.position.x){
-                Player1.fall.x = 9} else Player1.fall.x = -9
+                if(Player2.Char === 'PL2'){
+                    setTimeout(() => {
+                        if(Player2.position.x < Player1.position.x){
+                            Player1.fall.x = 9} else Player1.fall.x = -9
+                    }, 50)
+                }else{
+                    if(Player2.position.x < Player1.position.x){
+                        Player1.fall.x = 9} else Player1.fall.x = -9
+                }
                 if(Player1.HP <= 30){
                     document.getElementById('le').style.backgroundColor = 'rgb(130, 16, 16)'
                 }
@@ -339,7 +353,7 @@ function anim(){
                 }
                 
             }
-        }
+        }}
         counteralt++
         if(counteralt > 5) bool.ENTER.press = false
     }
@@ -352,12 +366,6 @@ function anim(){
         Player2.velocity.x = 0
         Player2.position.x -= 3
         
-    }
-    if(Player1.velocity.x === 0){
-        Player1.FramesMax = 4
-    }
-    if(Player2.velocity.x === 0){
-        Player2.FramesMax = 4
     }
 
     

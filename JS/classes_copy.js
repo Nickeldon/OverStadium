@@ -1,7 +1,7 @@
 let intervals = 100
 let count = 0;
 class Fighter{
-    constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo, Framescount, Char, jump, ivalue, hit, fall, rotate}){
+    constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo, Framescount, Char, jump, ivalue, hit, fall, rotate, directories}){
         this.position = position
         this.velocity = velocity
         this.lastpress = lastpress,
@@ -28,15 +28,19 @@ class Fighter{
         this.ivalue = ivalue,
         this.hit = hit,
         this.fall = fall,
-        this.rotate = rotate
+        this.rotate = rotate,
+        this.directories = directories
     }
 
     draw(){
         var metadata = Skin(this.Char)
         var incy = metadata[5];
-        var offset = metadata[6]
+        var offset = metadata[6];
+        
+        //console.log(Player1.directories)
+
         if(this.hit){
-            this.image.src = metadata[0].hit
+            this.image = this.directories.hit
             this.FramesMax = metadata[1].hit
             this.jump = metadata[4]
             this.ivalue = metadata[3]
@@ -52,7 +56,7 @@ class Fighter{
             if(verif >= 1 && verif <= 5 && this.isattack){ console.log('combo', verif); this.lastattack = 0}
 
             if(this.isattack){
-                this.image.src = metadata[0].attack;
+                this.image = this.directories.attack;
                 this.FramesMax = metadata[1].attack
                 this.jump = metadata[4]
                 this.ivalue = metadata[3]
@@ -65,7 +69,7 @@ class Fighter{
                 }
             }else{
                 if(this.velocity.x === 0 && this.velocity.y === 0){
-                    this.image.src = metadata[0].idle;
+                    this.image = this.directories.idle;
                     this.FramesMax = metadata[1].idle;
                     this.jump = metadata[4]
                     this.ivalue = metadata[3]
@@ -75,7 +79,7 @@ class Fighter{
                 }
 
                 else if(this.velocity.x !== 0 && this.velocity.y === 0){
-                    this.image.src = metadata[0].run;
+                    this.image = this.directories.run;
                     this.FramesMax = metadata[1].run;
                     this.jump = metadata[4]
                     this.ivalue = metadata[3]
@@ -91,7 +95,7 @@ class Fighter{
                 }
                 else if(this.velocity.y !== 0){
                     if(Math.trunc(this.velocity.y) <= 0 ){
-                        this.image.src = metadata[0].jump;
+                        this.image = this.directories.jump;
                         
                         this.FramesMax = metadata[1].jump;
                     }
@@ -99,7 +103,7 @@ class Fighter{
                         this.jump = metadata[4]
                         this.ivalue = metadata[3]
                         
-                        this.image.src = metadata[0].fall;
+                        this.image = this.directories.fall;
                         this.FramesMax = metadata[1].fall
                     }
                     
