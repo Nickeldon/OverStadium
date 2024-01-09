@@ -1,5 +1,6 @@
 let intervals = 100
 let count = 0;
+let framecnt = 0;
 class Fighter{
     constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo, Framescount, Char, jump, ivalue, hit, fall, rotate, directories}){
         this.position = position
@@ -36,36 +37,46 @@ class Fighter{
         var metadata = Skin(this.Char)
         var incy = metadata[5];
         var offset = metadata[6];
-        
-        //console.log(Player1.directories)
 
         if(this.hit){
             this.image = this.directories.hit
             this.FramesMax = metadata[1].hit
             this.jump = metadata[4]
             this.ivalue = metadata[3]
-            console.log(this.Framescount, this.FramesMax)
+            console.log('THIS: ',this.Framescount)
+            if(framecnt === 0) this.Framescount = 0;
+
+            framecnt++
             if(this.Framescount >= this.FramesMax - 1){
                 console.log('yes')
                 this.Framescount = 0;
-                this.hit = false
+                this.hit = false;
+                framecnt = 0;
+                
             }
         }
         else{
             var verif = Math.trunc(Date.now() / this.lastattack)
-            if(verif >= 1 && verif <= 5 && this.isattack){ console.log('combo', verif); this.lastattack = 0}
-
+            if((Date.now() - this.lastattack) <= 200 && this.isattack && !this.iscombo){ console.log('combo', verif); this.lastattack = undefined; this.iscombo = true}
+            else //console.log(Date.now() - this.lastattack)
+            
             if(this.isattack){
-                this.image = this.directories.attack;
+                //console.log(Player2.Framescount)
+                if(this.iscombo) this.image = this.directories.cmb1
+                else if(!this.iscombo && this.Framescount === 0) this.image = this.directories.attack;
                 this.FramesMax = metadata[1].attack
                 this.jump = metadata[4]
                 this.ivalue = metadata[3]
                 this.canattack = false;
-                if(this.Framescount === this.FramesMax){
+                this.lastattack = undefined
+                if(this.Framescount >= this.FramesMax){
                     this.lastattack = Date.now()
                     this.Framescount = 0;
                     this.isattack = false;
-                    this.canattack = true;
+                    this.iscombo = false;
+                    setTimeout(() => {
+                        this.lastattack = undefined
+                    }, 500)
                 }
             }else{
                 if(this.velocity.x === 0 && this.velocity.y === 0){
@@ -74,7 +85,7 @@ class Fighter{
                     this.jump = metadata[4]
                     this.ivalue = metadata[3]
                     if(this.Framescount === this.FramesMax - 1){
-                        this.Framescount = 0
+                        this.Framescount = 0;                        
                     }
                 }
 
@@ -173,7 +184,7 @@ class Fighter{
 }
 
 class Sprite{
-    constructor({position, imageSRC, width, height, scale = 1, FramesMax = 1, CurrentFrame}){
+    constructor({position, imageSRC, width, height, scale = 1, FramesMax = 1, CurrentFrame, choosen}){
         this.position = position,
         this.width = width,
         this.height = height,
@@ -181,23 +192,23 @@ class Sprite{
         this.image.src = imageSRC,
         this.CurrentFrame = CurrentFrame,
         this.scale = scale,
-        this.FramesMax = FramesMax
+        this.FramesMax = FramesMax,
+        this.choosen = choosen
     }
 
     draw(){
         try{
-        c.drawImage(this.image, this.position.x, this.position.y, this.image.width*1.5, this.image.height*1.5 )}catch(e){}
+        c.drawImage(this.image,  this.position.x, this.position.y, this.image.width*this.scale.x, this.image.height*this.scale.y )}catch(e){}
 }
     updat(){
         this.draw()
         //If character t
-           
     }
 }
 
 
 setInterval(() => {
-    //console.log(Player1.increm, Player1.jump, Player1.ivalue)
+    if(Player1.velocity.x !== 0) console.log(Player1.increm, Player1.jump)
     if(!isfinishedP && !isfinishedT && !ispaused){
     if(Player1.increm < (Player1.ivalue + (Player1.jump*(Player1.FramesMax - 1)))){
         

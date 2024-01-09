@@ -52,6 +52,7 @@ function redirect(num){
 
 //TIMER     
 setInterval(function () {
+    if(document.getElementById('timer').innerHTML !== ' ∞ '){
     if(document.getElementById('timer').innerHTML > 0 && !isfinishedP && !isfinishedT && !ispaused){document.getElementById('timer').innerHTML -= 1}
         if(document.getElementById('timer').innerHTML === '0' && alertcounter === 0){
             alertcounter++
@@ -72,8 +73,12 @@ setInterval(function () {
                     }, 3000)
                 }
             }, 1)
-            isfinishedT = true
-        }}, 1000)
+            isfinishedT = true}
+        }else{
+            document.getElementById('timer').style.fontSize = '50px'
+            document.getElementById('timer').style.fontWeight = '200'
+        }
+        }, 1000)
 
 //FPS COUNTER
 let initialpos = -60
@@ -100,17 +105,55 @@ function refreshLoop() {
   
   refreshLoop();
 
-        
-    let bgcount = 0
+
+var urlParams = new URLSearchParams(window.location.search);
+var metadata = urlParams.get('choice');   
+metadata = JSON.parse(metadata)
+
+let framecount = 0;
+let bgcount = BGchooser(metadata.data.BG)[0]
+
+console.log(bgcount)
 setInterval(() => {
-    if(bgcount < 4){
-    bgcount++
-    // background.image.src = `../Addons/Background/${bgcount}.gif`
-} else {bgcount = 0}
+    if(framecount < bgcount){
+    framecount++
+    background.image.src = `../Addons/Background/${background.choosen}/${framecount}.gif`
+} else {framecount = 0}
 }, 130)
 
 /////////////////////////////////// PXLOADER
 
+function BGchooser(num){
+    var frames
+    var scale
+    switch(num){
+        case 'BG1': {
+            frames = 4
+            scale = 1
+        }break;
+
+        case 'BG2': {
+            frames = 8
+            scale = 1.5
+        }break;
+
+        case 'BG3': {
+            frames = 12
+            scale = 1.5
+        }break;
+
+        case 'BG4': {   
+            frames = 4
+            scale = 1.5
+        }break;
+
+        case 'BG5': {
+
+        }break;
+    }
+
+    return [frames, scale]
+}
 
 function Skin(char){
     var image;
@@ -120,6 +163,7 @@ function Skin(char){
     var jumping;
     var yi;
     var offsety;
+    var atkframe;
     switch(char){
         case 'PL1': {Frames = {
             attack: 4,
@@ -133,7 +177,8 @@ function Skin(char){
         ival = 70;
         jumping = 200;
         yi = 170;
-        offsety = 4
+        offsety = 4;
+        atkframe = 2
         }break;
         case 'PL2': {Frames = {
                 attack: 6,
@@ -147,6 +192,7 @@ function Skin(char){
             ival = 70;
             jumping = 200;
             yi = 153;
+            atkframe = 4
             offsety = 0
         }break;
         case 'PL3': {Frames = {
@@ -156,10 +202,10 @@ function Skin(char){
             fall: 3,
             run: 8
         }
-        inc = 48;
-        ival = 48;
+        inc = 66;
+        ival = 66;
         jumping = 162;
-        yi = 0;
+        yi = 130;
         offsety = 0
         }break;
         case 'PL4': {Frames = {
@@ -169,12 +215,25 @@ function Skin(char){
             fall: 2,
             run: 8
         }
-        inc = 48;
+        inc = 65;
         jumping = 150;
-        ival = 48;
-        yi = 0;
+        ival = 65;
+        yi = 140;
         offsety = 0
     }break;
+    case 'PL5': {Frames = {
+        attack: 7,
+        idle: 11,
+        jump: 3,
+        fall: 3,
+        run: 8
+    }
+    inc = 73.5;
+    jumping = 180;
+    ival = 73.5;
+    yi = 150;
+    offsety = 0
+}break;
     default: {
         char = null;
     }
@@ -193,7 +252,7 @@ function Skin(char){
         }
     }
 
-return [image, Frames, inc, ival, jumping, yi, offsety]
+return [image, Frames, inc, ival, jumping, yi, offsety, atkframe]
 }
 
 
@@ -201,7 +260,6 @@ function anim(meta){
     Player1.images = meta.P1
     Player2.images = meta.P2
     window.requestAnimationFrame(anim)
-
     //Request 60FPS limit
     const msNow = window.performance.now()
     const msPassed = msNow - msPrev
@@ -276,7 +334,9 @@ function anim(meta){
     }
     
     if(Player1.isattack){
-
+        const meta = Skin(Player1.Char)
+        const atkframe = meta[7]
+        if(Player1.Framescount >= atkframe){
         if(Player2.position.y >= Player1.position.y - 220){
         if(Player2.position.x >= Player1.position.x - 205 && Player2.position.x <= Player1.position.x && Player2pres === 'l'){Player2pres = 'touch'}
 
@@ -284,7 +344,10 @@ function anim(meta){
         if(Player2.position.x <= Player1.position.x + 210 && Player2.position.x >= Player1.position.x || Player2pres === 'touch'){
             if(Player2.position.y <= Player1.position.y + 60){
                 if(Player2.HP > 0){
-                Player2.HP -= 0.5
+                    if(Player1.iscombo){
+                        Player2.HP -= 0.9
+                    }
+                    else Player2.HP -= 0.1
                 Player2.hit = true
                 Player2.velocity.y = -9;
                 if(Player1.Char === 'PL2'){
@@ -299,7 +362,8 @@ function anim(meta){
                 if(Player2.HP <= 30){
                     document.getElementById('ri').style.backgroundColor = 'rgb(130, 16, 16)'
                 }
-                console.log('PLAYER 2 TOUCHED HP REMAINING: ', Player2.HP)}
+                //console.log('PLAYER 2 TOUCHED HP REMAINING: ', Player2.HP)
+            }
                 else{
                     
                     Player2.HP = 0;
@@ -311,24 +375,29 @@ function anim(meta){
                 }
                 
             }
-        }}
+        }}}
         
         counter++
-        if(counter > 5) bool.e.press = false 
     }
-    if(Player2.isattack && bool.ENTER.press){
+    if(Player2.isattack){
         atk = 1
-        
+        const meta = Skin(Player2.Char)
+        const atkframe = meta[7]
+
+        if(Player2.Framescount >= atkframe){
         if(Player1.position.y >= Player2.position.y - 220){
-            console.log(Player1.position.y, Player2.position.y)
+            //console.log(Player1.position.y, Player2.position.y)
         if(Player2.position.x - 225 <= Player1.position.x && Player2.position.x >= Player1.position.x ){Player1pres = 'touch'}
 
         if(Player1.position.x <= Player2.position.x + 220 && Player1.position.x >= Player2.position.x || Player1pres === 'touch'){
             if(Player1.position.y <= Player2.position.y + 60){
                 if(Player1.HP > 0){
-                Player1.HP -= 1.5
+                    if(Player2.iscombo){
+                        Player1.HP -= 0.9
+                    }
+                    else Player1.HP -= 0.1
                 Player1.hit = true
-                Player1.velocity.y = -9;
+                if(counteralt === 0) Player1.velocity.y = -9;
                 if(Player2.Char === 'PL2'){
                     setTimeout(() => {
                         if(Player2.position.x < Player1.position.x){
@@ -341,7 +410,8 @@ function anim(meta){
                 if(Player1.HP <= 30){
                     document.getElementById('le').style.backgroundColor = 'rgb(130, 16, 16)'
                 }
-                console.log('PLAYER 1 TOUCHED HP REMAINING: ', Player1.HP)}
+                //console.log('PLAYER 1 TOUCHED HP REMAINING: ', Player1.HP)
+            }
                 else{
                     Player1.HP = 0
                     console.log('PLAYER 1 IS DEAD; HP REMAINING: ', Player1.HP)
@@ -352,7 +422,7 @@ function anim(meta){
                 }
                 
             }
-        }}
+        }}}
         counteralt++
         if(counteralt > 5) bool.ENTER.press = false
     }

@@ -171,8 +171,13 @@ function StopSound(soundobj) {
         console.log("continue", num)
         if(num === 1){
         document.getElementById('transition').style.backgroundColor = 'black'
+        var Options = {
+            showFPS: document.getElementById('fps-box').innerHTML,
+            Timer: document.getElementById('time-choice').innerText,
+        }
+        Options = JSON.stringify(Options)
         setTimeout(() => {
-            window.location.href = './charsel.html'
+            window.location.href = './charsel.html?options=' + Options
         },1000)
     }
     else if(num === 3){

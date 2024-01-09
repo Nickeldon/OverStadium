@@ -11,32 +11,32 @@
         @font-face { font-family: PixelifySans; src: url('./Addons/PixelifySans.ttf');}
       </style>
 </head>
-<body>
-    <div style="height: 576px; width: 1024px; display: block; position: absolute;">
+<body style="background-color: black; width: 100%; height: 100%; position: fixed; overflow:hidden;">
+    <div style="height: 576px; width: 1024px; background-color: black; display: block; position: fixed; border-width: 5px; border-color: white; border-style: solid; border-radius: 5px;">
         <h1 style="display: block; position: absolute; width: 100%; align-self:start; font-size: 60px; color: white;">CHOOSE YOUR OVERFATE</h1>
 
         <div class="selector" id="sel" style="position: absolute; width: 100%; top:75%; align-items: center; justify-content: center;display: flex; display: flex;">
            
-            <div class="select1" style="display: flex;">   
-                <button style="margin-right: 20px;" onclick="selector1('Arrow-Left')">
+            <div class="select1" style="display: flex; position: absolute; left: 19%; width:220px; height: fit-content; align-items: center; justify-content: center;">   
+                <button style="margin-right: 20px; position: absolute; left: 0;" onclick="selector1('Arrow-Left')">
                     <img src="./Addons/Arrow-left.png" alt="">
                 </button>
-                <h4 id="label1">
+                <h4 id="label1" style="text-align: center;">
                     #char1
                 </h4>
-                <button style="margin-left: 20px;" onclick="selector1('Arrow-Right')">
+                <button style="margin-left: 20px; position: absolute; right: 0;" onclick="selector1('Arrow-Right')">
                     <img src="./Addons/Arrow-right.png" alt="">
                 </button>
             </div>
 
-            <div class="select2" style="display: flex; margin-left: 200px;">   
-                <button style="margin-right: 20px;" onclick="selector2('Arrow-Left')">
+            <div class="select2" style="display: flex; margin-left: 200px;position: absolute; right: 20%; width:220px; height: fit-content; align-items: center; justify-content: center;">   
+                <button style="margin-right: 20px; position: absolute; left: 0;" onclick="selector2('Arrow-Left')">
                     <img src="./Addons/Arrow-left.png" alt="">
                 </button>
                 <h4 id="label2">
                     #char2
                 </h4>
-                <button style="margin-left: 20px;">
+                <button style="margin-left: 20px; position: absolute; right: 0;">
                     <img src="./Addons/Arrow-right.png" alt="" onclick="selector2('Arrow-Right')">
                 </button>
             </div>
@@ -44,19 +44,134 @@
         </div>
 
         <div class="btn-wrap">
-            <a class="btn btn-trapezoid-outline" onclick="Bridge()">
-              <span>FIGHT</span>
+            <a class="btn btn-trapezoid-outline" onclick="Bridge(1)" style=" left: -30px; position: absolute;">
+              <span>CONTINUE</span>
             </a>
           </div>
 
-        <canvas height="576" width="1024" style="border-width: 5px; border-color: white; border-style: solid; border-radius: 5px;">
+        <canvas height="576" width="1024" style="">
 
         </canvas>
+
+
+        <div class="bg-sel" id="bg-sel" style="display: none;">
+            <div style="width: 100%; height: 100%;  opacity: 100%; position: absolute; display: block;">
+                <h1 style="color: white; font-size: 50px;">
+                    SELECT THE SCENE
+                </h1>
+                <div class="selector" style="position: absolute; height: 55%; width: 90%; bottom: 100px; align-items: center; align-self: center; justify-content: center; justify-self: center; left: 45px; border-color: #136377; 
+                padding-right: 10px; border-width: 3px; border-style: solid;">
+
+                    <table>
+
+                        <tr>
+                            <td>
+                                <a onclick = "hoverBG('BG1')" class="selbg" id="BG1">
+                                <img src="./Addons/Background/BG1/1.gif">
+                                </a>
+                            </td>
+                            <td>
+                                <a onclick = "hoverBG('BG2')" class="selbg" id="BG2">
+                                    <img src="./Addons/Background/BG2/1.gif">
+                                </a>
+                            </td>
+                            <td>
+                                <a onclick = "hoverBG('BG3')" class="selbg" id="BG3">
+                                    <img src="./Addons/Background/BG3/1.gif"></a>
+                            </td>
+                            <td>
+                                <a onclick = "hoverBG('BG4')" class="selbg" id="BG4">
+                                    <img src="./Addons/Background/BG4/1.gif"></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a onclick = "hoverBG('BG5')" class="selbg" id="BG5"></a>
+                            </td>
+                            <td>
+                                <a onclick = "hoverBG('BG6')" class="selbg" id="BG6"></a>
+                            </td>
+                            <td>
+                                <a onclick = "hoverBG('BG7')" class="selbg" id="BG7"></a>
+                            </td>
+                            <td>
+                                <a onclick = "hoverBG('BG8')" class="selbg" id="BG8"></a>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+            </div>
+            
+            <div class="btn-wrap" style="position: absolute; bottom: 0; top: 87%;">
+                <a class="btn btn-trapezoid-outline" onclick="Bridge(2)">
+                  <span>FIGHT</span>
+                </a>
+              </div>
+        </div>
+
 
         <div id="transition" class="tr" style="display: none; position: absolute; top: 0; width: 100%; height: 100%; background-color: transparent;"></div>        
     </div>
     
+    
     <style>
+        a img{
+            width: 100%;
+            height: 100%;
+        }
+        .selector a{
+            position: relative;
+            height: 100px;
+            width: 200px;
+            border-radius: 5px;
+            border-color: white;
+            border-style: solid;
+            border-width: 3px;
+            display: block;
+            transition: all .5s ease-out;
+            
+        }
+
+        .selector a:hover{
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        .selector table{
+            display: block;
+            margin-right: 70px;
+            padding-right: 30px;
+            td{
+                position: relative;
+                top: 10px;
+            padding-left: 15px;
+            padding-top: 20px;
+            }
+            tr{
+                position: relative;
+                padding-top: 50px;
+            }
+        }
+        
+        .bg-sel{
+            opacity: 100%;
+            display: block;
+            width: 98%;
+            border-radius: 15px;
+            background-color: rgb(44, 44, 44);
+            border-width: 5px;
+            border-style: solid;
+            border-color: white;
+            height: 96%;
+            position: absolute;
+            margin: 10px;
+            top: 0;
+            left: 100%;
+            align-self: center;
+            justify-content: center;
+            transition: all .5s ease-out;
+        }
         .tr{
             transition: all .5s ease-out;
         }
