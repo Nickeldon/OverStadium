@@ -58,8 +58,16 @@ var background = new Sprite({
         x:0,
         y:0
     },
+    width: canvas.width,
+    height: canvas.height,
+    scale:{
+        x: 1.5,
+        y: 1.5,
+
+    },
     imageSRC: '../Addons/Background/BACKG1.gif',
-    CurrentFrame: 0
+    CurrentFrame: 0,
+    choosen: null
 })
  
 var Player1 = new Fighter({
@@ -80,7 +88,7 @@ FramesMax:1,
 isattack: false,
 increm: null,
 canattack:true,
-lastattack: false,
+lastattack: null,
 iscombo:false,
 Framescount: 0,
 Char: 'PL1',
@@ -137,8 +145,8 @@ directories: null
         Player2.jump = Skin(Player2.Char)[4] || 200;
         Player2.ivalue = Skin(Player2.Char)[3] || 70
 
-
-
+        
+        
 //KEY HANDLERS 
 var Lastrelease = 0
 window.addEventListener('keydown', (event) => {
@@ -187,20 +195,38 @@ window.addEventListener('keydown', (event) => {
         case 'e': {
             //Up Attack
             if(!Player1.isattack){
+                bool.e.press = true
+                Player1.isattack = true;
+                Player1.Framescount = 0
+                Player1.increm = 70}
+                Player1.lastpress = 'e'
+
+                /*
+                 //Up Attack
+            if(!Player1.isattack && Date.now() - Lastrelease >= 700 && Player1.canattack){
             bool.e.press = true
             Player1.isattack = true;
             Player1.Framescount = 0
-            Player1.increm = 70}
+            Player1.increm = 70
             Player1.lastpress = 'e'
+            Player1.iscombo = false;
+            Player1.canattack = false
+            Lastrelease = Date.now()}
+            else if(Player1.canattack && !Player1.iscombo && Date.now() - Lastrelease >= 500){
+                Player1.iscombo = true
+                console.log('combo')
+            Player1.lastpress = 'e'
+                */
+            
         }break;
         
         case 'Enter': {
             if(!Player2.isattack){
                 bool.ENTER.press = true
                 Player2.isattack = true;
-                Player2.lastpress = 'ENTER'
                 Player2.Framescount = 0
                 Player2.increm = 70}
+                Player2.lastpress = 'ENTER'
         }break;
 
         case 'ArrowLeft': {
@@ -287,12 +313,24 @@ window.addEventListener('keyup', (event) => {
         }break;
 
         case 'e': {
-            if(Player1.canattack){
+            /*if(Player1.canattack){
+            console.log(Date.now() - Lastrelease)
             bool.e.press = false
             counter = 0
             Player1.canattack = false
             }
-            Lastrelease = Date.now()
+            else{
+                Player1.canattack = true
+            }*/
+
+            if(Player1.canattack){
+                bool.e.press = false
+                counter = 0
+                Player1.canattack = false
+                }
+                Lastrelease = Date.now()
+            
+            
 
         }break;
 

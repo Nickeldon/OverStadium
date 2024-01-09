@@ -1,3 +1,7 @@
+var urlParams = new URLSearchParams(window.location.search);
+var options = urlParams.get('options');
+var selectedbg;
+
 var loader = new PxLoader()
 const directory = {
     CH1: loader.addImage(`../Addons/Sprites/PL1/Idle.png`),
@@ -10,6 +14,20 @@ const directory = {
 loader.addCompletionListener(() => {
 animate()
 })
+
+function hoverBG(selected){
+    var selectarray = document.getElementsByClassName('selbg')
+
+    for(i = 0; i<selectarray.length; i++){
+        selectarray[i].style.borderColor = 'white'
+    }
+
+    document.getElementById(selected).style.borderColor = 'orange'
+    selectedbg = selected
+
+    
+}
+
 const canv = document.querySelector('canvas')
 const ctx = canv.getContext('2d')
 let src = null
@@ -112,22 +130,45 @@ const Player2 = new choice({
     }
 })
 
-function Bridge(){
-    document.getElementById('transition').style.display = 'block'
-    document.getElementById('transition').style.backgroundColor = 'black'
-    if(!choice1) choice1 = 'PL1'
-    if(!choice2) choice2 = 'PL1'
-    var json = {
-        "data": {
-          "P1": choice1,
-          "P2": choice2
-        }}
-        json = JSON.stringify(json)
-            setTimeout(() => {
-                window.location.href = '../index.html?choice=' + json
-            }, 1000)
-            // Handle the response as needed
-    
+function Bridge(path){
+            switch(path){
+                case 1: {
+
+                    document.getElementById('bg-sel').style.display = 'block'
+                    var ival = 100;
+
+                    setInterval(() => {
+                        if(ival > 1){
+                        ival-=5
+                        
+                        document.getElementById('bg-sel').style.left = `${ival}%`
+                            
+                        if(ival === 0){
+                            document.getElementById('bg-sel').style.left = `-0.5%`     
+                        }
+                    }
+                    }, 0.01)
+                    
+
+                }break;
+
+                case 2: {
+                    document.getElementById('transition').style.display = 'block'
+                    document.getElementById('transition').style.backgroundColor = 'black'
+                    var json = {
+                        "data": {
+                        "P1": choice1 || 'PL1',
+                        "P2": choice2 || 'PL1',
+                        "BG": selectedbg || null
+                        }}
+                        json = JSON.stringify(json)
+                            setTimeout(() => {
+                                window.location.href = '../index.html?choice=' + json + '&options=' + options
+                            }, 1000)
+                            // Handle the response as needed
+                }break;
+
+            }
     
 }
 
@@ -146,18 +187,20 @@ function selector1(action){
                 choice1 = 'PL4'}
                 break;
             case 'PL4':{
-                choice1 = 'PL1'
-                //choice1 = 'PL5'
+                choice1 = 'PL5'
             }
                 break;
+            case 'PL5': {
+                choice1 = 'PL1'
+            }break;
 
         }
     }
     else{
         switch(choice1){
-            /*case 'PL5':{
+            case 'PL5':{
                 choice1 = 'PL4'}
-                break;*/
+                break;
             case 'PL4':{
                 choice1 = 'PL3';
                 }
@@ -170,8 +213,7 @@ function selector1(action){
                 choice1 = 'PL1'}
                 break;
             case 'PL1': {
-                choice1 = 'PL4'
-                //choice2 = 'PL5'
+                choice1 = 'PL5'
             }break;
 
         }
@@ -216,7 +258,12 @@ function selector1(action){
                 document.getElementById('label1').innerHTML = 'Aisha'
         }break;
         case 'PL5': {
-
+            Player1.factor.x = 10;
+            Player1.increm.x = 48;
+            Player1.increm.y = 54;
+            Player1.iframe = 48;
+            Player1.jumps = 180;
+            document.getElementById('label1').innerHTML = 'Gregory'
         }break;
     }
 }
@@ -241,17 +288,20 @@ function selector2(action){
                 }
                 break;
             case 'PL4':{
-                //choice2 = 'PL5'
-                choice2 = 'PL1'}
+                choice2 = 'PL5'
+                }
                 break;
+            case 'PL5': {
+                choice2 = 'PL1'
+            }break;
 
         }
     }
     else{
         switch(choice2){
-            /*case 'PL5':{
+            case 'PL5':{
                 choice2 = 'PL4'}
-                break;*/
+                break;
             case 'PL4':{
                 choice2 = 'PL3'}
                 break;
@@ -262,8 +312,7 @@ function selector2(action){
                 choice2 = 'PL1'}
                 break;
             case 'PL1': {
-                choice2 = 'PL4'
-                //choice2 = 'PL5'
+                choice2 = 'PL5'
             }break;
 
         }
@@ -302,7 +351,12 @@ function selector2(action){
                 document.getElementById('label2').innerHTML = 'Aisha'
         }break;
         case 'PL5': {
-
+            Player2.factor.x = 10;
+            Player2.increm.x = 48;
+            Player2.increm.y = 54;
+            Player2.iframe = 48;
+            Player2.jumps = 180;
+            document.getElementById('label2').innerHTML = 'Gregory'
         }break;
     }
 }
@@ -325,14 +379,26 @@ function animate(){
         case 'PL2': {
             Player1.image = directory.CH2
             Player1.FramesMax = 8
+            Player1.position.x = 210,
+            Player1.position.y = 218
         }break;
         case 'PL3': {
             Player1.image = directory.CH3
             Player1.FramesMax = 10
+            Player1.position.x = 210,
+            Player1.position.y = 218
         }break;
         case 'PL4': {
             Player1.image = directory.CH4
             Player1.FramesMax = 8
+            Player1.position.x = 210,
+            Player1.position.y = 218
+        }break;
+        case 'PL5': {
+            Player1.image = directory.CH5
+            Player1.FramesMax = 11
+            Player1.position.x = 150,
+            Player1.position.y = 192
         }break;
         default:{
             console.log('none selected')
@@ -348,14 +414,26 @@ function animate(){
         case 'PL2': {
             Player2.image = directory.CH2
             Player2.FramesMax = 8
+            Player2.position.x = 645,
+            Player2.position.y = 218
         }break;
         case 'PL3': {
             Player2.image = directory.CH3
             Player2.FramesMax = 10
+            Player2.position.x = 645,
+            Player2.position.y = 218
         }break;
         case 'PL4': {
             Player2.image = directory.CH4
             Player2.FramesMax = 8
+            Player2.position.x = 645,
+            Player2.position.y = 218
+        }break;
+        case 'PL5': {
+            Player2.image = directory.CH5
+            Player2.FramesMax = 11
+            Player2.position.x = 725,
+            Player2.position.y = 192
         }break;
         default:{
             console.log('none selected')
