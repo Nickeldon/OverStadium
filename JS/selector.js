@@ -4,11 +4,11 @@ var selectedbg;
 
 var loader = new PxLoader()
 const directory = {
-    CH1: loader.addImage(`../Addons/Sprites/PL1/Idle.png`),
-    CH2: loader.addImage(`../Addons/Sprites/PL2/Idle.png`),
-    CH3: loader.addImage(`../Addons/Sprites/PL3/Idle.png`),
-    CH4: loader.addImage(`../Addons/Sprites/PL4/Idle.png`),
-    CH5: loader.addImage(`../Addons/Sprites/PL5/Idle.png`)
+    CH1: loader.addImage(`./Addons/Sprites/PL1/Idle.png`),
+    CH2: loader.addImage(`./Addons/Sprites/PL2/Idle.png`),
+    CH3: loader.addImage(`./Addons/Sprites/PL3/Idle.png`),
+    CH4: loader.addImage(`./Addons/Sprites/PL4/Idle.png`),
+    CH5: loader.addImage(`./Addons/Sprites/PL5/Idle.png`)
 }
 
 loader.addCompletionListener(() => {
@@ -37,7 +37,7 @@ document.getElementById('label1').innerHTML = 'Erige'
 document.getElementById('label2').innerHTML = 'Erige'
 
 var bgimage = new Image()
-bgimage.src = '../Addons/Background/gradient.png' 
+bgimage.src = './Addons/Background/gradient.png' 
 
 ctx.fillRect(0,0, canv.width, canv.height)
 
@@ -163,7 +163,7 @@ function Bridge(path){
                         }}
                         json = JSON.stringify(json)
                             setTimeout(() => {
-                                window.location.href = '../index.html?choice=' + json + '&options=' + options
+                                window.location.href = 'index.html?choice=' + json + '&options=' + options
                             }, 1000)
                             // Handle the response as needed
                 }break;

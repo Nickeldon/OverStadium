@@ -8,7 +8,43 @@ const fpslim = 60
 const msPerFrame = 1000 / fpslim
 var TO_RADIANS = Math.PI/180; 
 
-function redirect(num){
+function GMOhandler(winner){
+    intervals = 20;
+    if(Player1.velocity.x !== 0) Player1.velocity.x = 0.01
+    if(Player1.velocity.y !== 0){
+            Player1.velocity.y = Player1.velocity.y / 5
+    }
+    if(Player2.velocity.x !== 0) Player2.velocity.x = 0.01
+    if(Player2.velocity.y !== 0){
+            Player2.velocity.y = Player2.velocity.y / 5
+    }
+    document.getElementById('GameOverScreen').style.display = 'block'
+
+    let cntpos1 = 0
+    let cntpos2 = 0
+    setInterval(() => {
+
+        if(cntpos1 < 170){
+        cntpos1+=2
+        document.getElementById('GMO-TXT1').style.left = `${cntpos1}px`
+    }else{
+        if(cntpos2 < 170){
+        cntpos2+=2
+        document.getElementById('GMO-TXT2').style.right = `${cntpos2}px`}
+    }
+    }, 0.01)
+    if(winner === 'PL1'){
+        document.getElementById('GMOBASETXT').style.color = '#6e71cc'
+        document.getElementById('PLWIN').innerHTML = 'Player 1'
+    }
+    else{
+        document.getElementById('GMOBASETXT').style.color = 'red'
+        document.getElementById('PLWIN').innerHTML = 'Player 2'
+    }
+    
+}
+
+function redirect(num, additional){
     switch(num){
         case 1 : {
             document.getElementById('pause').style.display = 'none'
@@ -24,18 +60,18 @@ function redirect(num){
             document.getElementById('transition').style.display = 'block'
             document.getElementById('transition').style.backgroundColor = 'black'
             setTimeout(() => {
-                window.location.href = '../mainmen.html'
+                window.location.href = './mainmen.html'
             }, 1000)
         }break;
 
         case 5 : {
-            //CHANGE CHARACTER
-            
+            //CHANGE CHARACTER   
+            var options = urlParams.get('options');
             document.getElementById('transition').style.display = 'block'
             document.getElementById('transition').style.backgroundColor = 'black'
             document.getElementById('transition').style.opacity = '100%'
             setTimeout(() => {
-                window.location.href = '../charsel.html'
+                window.location.href = './charsel.html?options='+options
             }, 1000)
 
         }break;
@@ -113,11 +149,10 @@ metadata = JSON.parse(metadata)
 let framecount = 0;
 let bgcount = BGchooser(metadata.data.BG)[0]
 
-console.log(bgcount)
 setInterval(() => {
     if(framecount < bgcount){
     framecount++
-    background.image.src = `../Addons/Background/${background.choosen}/${framecount}.gif`
+    background.image.src = `./Addons/Background/${background.choosen}/${framecount}.gif`
 } else {framecount = 0}
 }, 130)
 
@@ -148,7 +183,8 @@ function BGchooser(num){
         }break;
 
         case 'BG5': {
-
+            frames = 8
+            scale = 1.8
         }break;
     }
 
@@ -242,13 +278,13 @@ function Skin(char){
 
     if(char){
         image = {
-            attack: `../Addons/Sprites/${char}/Attack1.png`,
-            cmb1: `../Addons/Sprites/${char}/Attack2.png`,
-            idle: `../Addons/Sprites/${char}/Idle.png`,
-            jump: `../Addons/Sprites/${char}/Jump.png`,
-            fall: `../Addons/Sprites/${char}/Fall.png`,
-            run: `../Addons/Sprites/${char}/Run.png`,
-            hit: `../Addons/Sprites/${char}/Take hit.png`
+            attack: `./Addons/Sprites/${char}/Attack1.png`,
+            cmb1: `./Addons/Sprites/${char}/Attack2.png`,
+            idle: `./Addons/Sprites/${char}/Idle.png`,
+            jump: `./Addons/Sprites/${char}/Jump.png`,
+            fall: `./Addons/Sprites/${char}/Fall.png`,
+            run: `./Addons/Sprites/${char}/Run.png`,
+            hit: `./Addons/Sprites/${char}/Take hit.png`
         }
     }
 
@@ -369,7 +405,8 @@ function anim(meta){
                     Player2.HP = 0;
                     
                     if(alertcounter === 0){
-                    document.getElementById('GameOverScreen').style.display = 'block'}
+                        GMOhandler('PL1')
+                    }
                     alertcounter++
                     isfinishedP = true
                 }
@@ -416,7 +453,8 @@ function anim(meta){
                     Player1.HP = 0
                     console.log('PLAYER 1 IS DEAD; HP REMAINING: ', Player1.HP)
                     if(alertcounter === 0){
-                        document.getElementById('GameOverScreen').style.display = 'block'}
+                        GMOhandler('PL2')
+                        }
                     alertcounter++
                     isfinishedP = true
                 }
