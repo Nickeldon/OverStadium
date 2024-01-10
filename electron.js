@@ -3,9 +3,9 @@ const {app, BrowserWindow} = electron
 const url = require('url')
 const path = require('path')
 
-require('electron-reload')(__dirname,{
+/*require('electron-reload')(__dirname,{
   electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
-})
+})*/
 
 let windowObj = null
 
@@ -29,5 +29,8 @@ function createWindow(){
 
 }
 
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
 
 app.on('ready', createWindow);
