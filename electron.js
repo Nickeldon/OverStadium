@@ -1,30 +1,33 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('node:path')
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 875,
-    height: 550,
-    webPreferences:{
-      preload: path.join([__dirname + '/Addons/Sprites/PL1/Idle.png',
-                          __dirname + '/Addons/Sprites/PL2/Idle.png'])
-    }
+const electron = require('electron');
+const {app, BrowserWindow} = electron
+const url = require('url')
+const path = require('path')
+
+require('electron-reload')(__dirname,{
+  electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+})
+
+let windowObj = null
+
+function createWindow(){
+  windowObj = new BrowserWindow({
+    width: 1050,
+    height: 617,
+    alwaysOnTop: false,
+    maximizable: false,
+    minimizable: false,
+    center: true,
+    autoHideMenuBar: true,
+    resizable: false
+  });
+
+  windowObj.loadURL(url.format(path.join(__dirname, 'mainmen.html')));
+
+  windowObj.on('closed', () => {
+    windowObj = null
   })
 
-  win.loadFile('charsel.html')
 }
 
-app.whenReady().then(() => {
-  createWindow()
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
+app.on('ready', createWindow);
