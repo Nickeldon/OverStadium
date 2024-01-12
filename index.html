@@ -373,10 +373,20 @@
            background.choosen = metadata.data.BG
            background.scale.x = BGchooser(background.choosen)[1]
            background.scale.y = BGchooser(background.choosen)[1]
+           var BGframes = BGchooser(background.choosen)[0]
            
            var loader = new PxLoader()
 
 //console.log(Player1.Char, Player2.Char)
+
+            var BGlinks = new Array(BGframes)
+            BGlinks.fill(0)
+            console.log(BGframes)
+            for(let i = 0; i<BGframes; i++){
+                BGlinks[i] = loader.addImage(`./Addons/Background/${background.choosen}/${i + 1}.gif`)
+            }
+            console.log(BGlinks)
+
 const Ply1img = {
     attack: loader.addImage(`./Addons/Sprites/${metadata.data.P1}/Attack1.png`),
     cmb1: loader.addImage(`./Addons/Sprites/${metadata.data.P1}/Attack2.png`),
@@ -406,7 +416,7 @@ var meta = {
 P1: Ply1img,
 P2: Ply2img
 }
-igniter(meta)
+igniter(meta, BGlinks)
 })
             loader.start()
         })
