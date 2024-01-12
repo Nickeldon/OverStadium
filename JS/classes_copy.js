@@ -184,12 +184,11 @@ class Fighter{
 }
 
 class Sprite{
-    constructor({position, imageSRC, width, height, scale = 1, FramesMax = 1, CurrentFrame, choosen}){
+    constructor({position, image, width, height, scale = 1, FramesMax = 1, CurrentFrame, choosen}){
         this.position = position,
         this.width = width,
         this.height = height,
-        this.image = new Image(),
-        this.image.src = imageSRC,
+        this.image = image,
         this.CurrentFrame = CurrentFrame,
         this.scale = scale,
         this.FramesMax = FramesMax,
@@ -198,6 +197,7 @@ class Sprite{
 
     draw(){
         try{
+            console.log(this.image)
         c.drawImage(this.image,  this.position.x, this.position.y, this.image.width*this.scale.x, this.image.height*this.scale.y )}catch(e){}
 }
     updat(){

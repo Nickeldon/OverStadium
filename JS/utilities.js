@@ -149,14 +149,16 @@ metadata = JSON.parse(metadata)
 let framecount = 0;
 let bgcount = BGchooser(metadata.data.BG)[0]
 
+function BGinit(links){
 setInterval(() => {
-    if(framecount < bgcount){
+    if(framecount < bgcount -1){
     framecount++
-    background.image.src = `./Addons/Background/${background.choosen}/${framecount}.gif`
-} else {framecount = 0}
+    background.image = links[framecount]
+} else {framecount = 0; background.image = links[0]}
 }, 130)
-
+}
 /////////////////////////////////// PXLOADER
+
 
 function BGchooser(num){
     var frames

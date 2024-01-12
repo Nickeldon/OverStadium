@@ -364,9 +364,10 @@ window.addEventListener('keyup', (event) => {
 
 let directory
 
-function igniter(meta){
+function igniter(meta, BGmetadata){
     directory = meta
     Player1.directories = meta.P1
     Player2.directories = meta.P2
     anim(meta)
+    BGinit(BGmetadata)
 }
