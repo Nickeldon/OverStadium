@@ -93,7 +93,11 @@
                     </div>
                 </div>
                 <div id="transition" class="tr" style="display: none; position: absolute; top: 0; width: 100%; height: 100%; background-color: transparent; transition: all 1s ease-out;"></div>
-                
+                <div id="load-scr" class="lodscr">
+                    <div id="spin-lod" class="spinner">
+
+                    </div>
+                </div>
                 <div class="TimeAlert" id="TimeAlert" style="display: none; position: absolute; border-radius: 10px; border-width: 3px; border-style: solid; border-color: silver; background-color: rgb(40, 40, 40); width: 40%; height: 32%; top: 37%; left: 30%;">
                     <div class="TimeUP" id="TimeUP" style="display: block; align-items: center; align-self: center; width: 100%; height: 100%; font-size: 1rem; justify-content: center; position: absolute;">
                        <div class="TimeOPT">
@@ -125,6 +129,42 @@
 
 
     <style>
+        .spinner{
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            border-top-color: rgb(138, 36, 36);
+            border-width: 10px;
+            border-radius: 50%;
+            border-style: solid;
+            background-color: transparent;
+            transition: opacity 0.75s, visibility 0.75s;
+            animation: loading 0.75s ease infinite;
+        }
+        .spinner-hidden{
+            opacity: 0;
+            visibility: 0;
+        }
+        @keyframes loading{
+            from{
+                transform: rotate(0turn);
+            }
+            to{
+                transform: rotate(1turn);
+            }
+        }
+        .lodscr{
+            background-color: black;
+            height: 100%;
+            width: 100%;
+            display: block;
+            position: absolute;
+            top: 0;
+            transition: opacity 0.75s, visibility 0.75s;
+
+        }
         .GMOTXT{
             transition: all .3s ease-out;
         }
@@ -332,18 +372,8 @@
     <script src="JS/utilities.js"></script>
     <script src="JS/main.js"></script>
     <script>
-        function RESTART(){
-            window.location.reload()
-        }
         var metadt
-        function getData(){
-           return $.getJSON("./JS/JSON/Bridge.json").then((data) => {
-            return data
-           })
-              
-        }
-               
-        getData().then((buffer) => {
+
             var urlParams = new URLSearchParams(window.location.search);
             
                 var metadata = urlParams.get('choice');   
@@ -376,6 +406,20 @@
            var BGframes = BGchooser(background.choosen)[0]
            
            var loader = new PxLoader()
+
+           if(Player1.Char === 'PL1' || Player1.Char === 'PL2'){
+            
+           }else{
+
+           }
+           
+           if(Player2.Char === 'PL1' || Player2.Char === 'PL2'){
+
+
+
+            }else{
+
+            }
 
 //console.log(Player1.Char, Player2.Char)
 
@@ -419,7 +463,7 @@ P2: Ply2img
 igniter(meta, BGlinks)
 })
             loader.start()
-        })
+        
 
 
  
