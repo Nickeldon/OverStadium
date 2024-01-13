@@ -12,7 +12,20 @@ const directory = {
 }
 
 loader.addCompletionListener(() => {
-animate()
+    setTimeout(() => {
+        animate()
+    }, 500)
+    setTimeout(() => {
+
+        document.querySelector(".spinner").classList.add('spinner-hidden')
+        setTimeout(() => {
+            document.querySelector('.lodscr').classList.add('spinner-hidden')
+            setTimeout(() => {
+                document.getElementById('load-scr').style.display = 'none'
+            }, 800)
+        },500)
+    }, 1000)
+
 })
 
 function hoverBG(selected){

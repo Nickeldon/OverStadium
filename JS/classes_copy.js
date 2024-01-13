@@ -34,21 +34,25 @@ class Fighter{
     }
 
     draw(){
+        if(Player1.Char === 'PL3' && Player1.velocity.x !== 0 && !Player1.isattack && !Player1.hit){
+            Player1.jump = 161.5
+        }
         var metadata = Skin(this.Char)
         var incy = metadata[5];
         var offset = metadata[6];
-
         if(this.hit){
             this.image = this.directories.hit
+            console.log(this.image)
             this.FramesMax = metadata[1].hit
             this.jump = metadata[4]
             this.ivalue = metadata[3]
-            console.log('THIS: ',this.Framescount)
-            if(framecnt === 0) this.Framescount = 0;
+            //console.log('THIS: ',Player1.Framescount)
 
+            if(framecnt === 0) this.Framescount = 0;
             framecnt++
+
             if(this.Framescount >= this.FramesMax - 1){
-                console.log('yes')
+                //console.log('yes')
                 this.Framescount = 0;
                 this.hit = false;
                 framecnt = 0;
@@ -69,6 +73,7 @@ class Fighter{
                 this.ivalue = metadata[3]
                 this.canattack = false;
                 this.lastattack = undefined
+                console.log(this.image)
                 if(this.Framescount >= this.FramesMax){
                     this.lastattack = Date.now()
                     this.Framescount = 0;
@@ -92,13 +97,8 @@ class Fighter{
                 else if(this.velocity.x !== 0 && this.velocity.y === 0){
                     this.image = this.directories.run;
                     this.FramesMax = metadata[1].run;
-                    this.jump = metadata[4]
+                    //this.jump = metadata[4]
                     this.ivalue = metadata[3]
-                    if(this.Char === 'PL3'){
-                        console.log('yes')
-                        this.ivalue = 48;
-                        this.jump = 158;
-                    }
                     if(this.Framescount === this.FramesMax - 1){
                         this.Framescount = 0
                     }
@@ -131,10 +131,10 @@ class Fighter{
                 var rad = 2 * Math.PI - deg * Math.PI / 180;    
                 c.rotate(rad);
                 c.scale(-1, 1);
-                c.drawImage(this.image, this.increm, 40, this.image.width / this.FramesMax, this.image.height, -this.width/2 - 100, -this.height/2 - (incy + offset), this.width*10, this.height* 6)
+                c.drawImage(this.image, this.increm, 40, this.image.width / this.FramesMax, this.image.height, -this.width/2 - 50, -this.height/2 - (incy + offset), this.width*10, this.height* 4)
                 c.restore()
             }
-            else c.drawImage(this.image,this.increm, 40, this.image.width / this.FramesMax, this.image.height, this.position.x, this.position.y - (incy), this.width * 11, this.height * 6)
+            else c.drawImage(this.image,this.increm, 40, (this.image.width / this.FramesMax), this.image.height, this.position.x -50, this.position.y - (incy), this.width * 11, this.height * 4)
             
     }
 
@@ -167,11 +167,11 @@ class Fighter{
             
             if(this.position.x < 0){
                 this.velocity.x = 0
-                this.position.x += 1
+                this.position.x = 1
             }
-            if(this.position.x > 910){
+            if(this.position.x > 960){
                 this.velocity.x = 0
-                this.position.x -= 1
+                this.position.x = 959
             }
 
             //HEALTH BARS
@@ -196,8 +196,8 @@ class Sprite{
     }
 
     draw(){
+        //console.log(this.image)
         try{
-            console.log(this.image)
         c.drawImage(this.image,  this.position.x, this.position.y, this.image.width*this.scale.x, this.image.height*this.scale.y )}catch(e){}
 }
     updat(){
@@ -208,15 +208,12 @@ class Sprite{
 
 
 setInterval(() => {
-    if(Player1.velocity.x !== 0) console.log(Player1.increm, Player1.jump)
     if(!isfinishedP && !isfinishedT && !ispaused){
     if(Player1.increm < (Player1.ivalue + (Player1.jump*(Player1.FramesMax - 1)))){
-        
         Player1.Framescount++
         if(Player1.increm === (Player1.ivalue + (Player1.jump*Player1.FramesMax))){
             Player1.increm += Player1.jump
         }
-    
     Player1.increm += Player1.jump}
     else {Player1.increm = Player1.ivalue;}
 

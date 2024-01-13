@@ -7,6 +7,11 @@ let msPrev = window.performance.now()
 const fpslim = 60
 const msPerFrame = 1000 / fpslim
 var TO_RADIANS = Math.PI/180; 
+var isstarted = false
+
+function RESTART(){
+    window.location.reload()
+}
 
 function GMOhandler(winner){
     intervals = 20;
@@ -89,7 +94,7 @@ function redirect(num, additional){
 //TIMER     
 setInterval(function () {
     if(document.getElementById('timer').innerHTML !== ' ∞ '){
-    if(document.getElementById('timer').innerHTML > 0 && !isfinishedP && !isfinishedT && !ispaused){document.getElementById('timer').innerHTML -= 1}
+    if(document.getElementById('timer').innerHTML > 0 && !isfinishedP && !isfinishedT && !ispaused  && isstarted){document.getElementById('timer').innerHTML -= 1}
         if(document.getElementById('timer').innerHTML === '0' && alertcounter === 0){
             alertcounter++
             document.getElementById('alttime').style.display = 'block'
@@ -153,6 +158,7 @@ function BGinit(links){
 setInterval(() => {
     if(framecount < bgcount -1){
     framecount++
+    //console.log(framecount)
     background.image = links[framecount]
 } else {framecount = 0; background.image = links[0]}
 }, 130)
@@ -212,7 +218,7 @@ function Skin(char){
             hit: 3
         }
         inc = null;
-        ival = 70;
+        ival = 65;
         jumping = 200;
         yi = 170;
         offsety = 4;
@@ -238,7 +244,8 @@ function Skin(char){
             idle: 10,
             jump: 3,
             fall: 3,
-            run: 8
+            run: 8,
+            hit: 3
         }
         inc = 66;
         ival = 66;
@@ -251,7 +258,8 @@ function Skin(char){
             idle: 8,
             jump: 2,
             fall: 2,
-            run: 8
+            run: 8,
+            hit: 3
         }
         inc = 65;
         jumping = 150;
@@ -264,7 +272,8 @@ function Skin(char){
         idle: 11,
         jump: 3,
         fall: 3,
-        run: 8
+        run: 8,
+        hit: 4
     }
     inc = 73.5;
     jumping = 180;
@@ -321,12 +330,10 @@ function anim(meta){
     if(Player2.position.x > Player1.position.x + 10){
         Player1pres = 'l'
         Player1.rotate = false
-        c.fillRect(Player2.position.x - 60, Player2.position.y + 30, 70, 30)
     }
     else{
         Player1pres = 'r'
         Player1.rotate = true
-        c.fillRect(Player2.position.x + 50, Player2.position.y + 30, 60, 30)
     }
 
     c.fillStyle = 'black'
@@ -466,7 +473,7 @@ function anim(meta){
         counteralt++
         if(counteralt > 5) bool.ENTER.press = false
     }
-    if((Player1.position.x + 50) > (Player2.position.x - 1) && Player1.position.y === Player2.position.y && Player1.position.x < Player2.position.x){
+    /*if((Player1.position.x + 50) > (Player2.position.x - 1) && Player1.position.y === Player2.position.y && Player1.position.x < Player2.position.x){
         Player1.position.x -= 3
         Player1.velocity.x = 0
     }
@@ -475,7 +482,13 @@ function anim(meta){
         Player2.velocity.x = 0
         Player2.position.x -= 3
         
-    }
+    }*/
+    //c.fillRect(Player1.position.x , Player1.position.y, Player1.width, Player1.height)
+    c.fillStyle = 'green'
+    //c.fillRect(Player2.position.x , Player2.position.y, Player2.width, Player2.height)
+    if(Player1.position.x + Player1.width > Player2.position.x - 1){
+        console.log('touched')
+    } 
 
     
     Player2.updat()

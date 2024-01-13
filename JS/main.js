@@ -81,7 +81,7 @@ velocity: {
 },
 lastpress: '',
 width: 50,
-height: 100,
+height: 150,
 HP: 100,
 imageSRC: SRCPl1,
 FramesMax:1,
@@ -107,7 +107,7 @@ directories: null
 //Let Player2 have higher mass than player1
 var Player2 = new Fighter({
     position: {
-    x:900,
+    x:950,
     y:150
 },
 velocity: {
@@ -115,13 +115,13 @@ velocity: {
     y:1
 },
 width: 50,
-height: 100,
+height: 150,
 lastpress: '',
 HP: 100,
 imageSRC: SRCPl2,
 FramesMax:1,
 isattack: false,
-increm: 70,
+increm: null,
 Framescount: 0,
 Char: 'PL1',
 ivalue: null,
@@ -136,14 +136,14 @@ directories: null
 })
 
 
-        Player1.increm = Skin(Player1.Char)[2] || 70
+        /*Player1.increm = Skin(Player1.Char)[2] || 70
         Player2.increm = Skin(Player2.Char)[2] || 70
 
         Player1.jump = Skin(Player1.Char)[4] || 200;
         Player1.ivalue = Skin(Player1.Char)[3] || 70
 
         Player2.jump = Skin(Player2.Char)[4] || 200;
-        Player2.ivalue = Skin(Player2.Char)[3] || 70
+        Player2.ivalue = Skin(Player2.Char)[3] || 70*/
 
         
         
@@ -170,7 +170,8 @@ window.addEventListener('keydown', (event) => {
             }else Player1.velocity.y = -20
             console.log('true')
             if(!Player1.isattack){
-            Player1.increm = 70}
+                Player1.increm = Skin(Player1.Char)[3]
+            }
             gravityaccy = 0.9
             bool.w.press = true
             Player1.lastpress = 'w'
@@ -198,7 +199,8 @@ window.addEventListener('keydown', (event) => {
                 bool.e.press = true
                 Player1.isattack = true;
                 Player1.Framescount = 0
-                Player1.increm = 70}
+                Player1.increm = Skin(Player1.Char)[3]
+            }
                 Player1.lastpress = 'e'
 
                 /*
@@ -207,7 +209,7 @@ window.addEventListener('keydown', (event) => {
             bool.e.press = true
             Player1.isattack = true;
             Player1.Framescount = 0
-            Player1.increm = 70
+            Player1.increm = Skin(Player1.Char)[3]
             Player1.lastpress = 'e'
             Player1.iscombo = false;
             Player1.canattack = false
@@ -225,7 +227,8 @@ window.addEventListener('keydown', (event) => {
                 bool.ENTER.press = true
                 Player2.isattack = true;
                 Player2.Framescount = 0
-                Player2.increm = 70}
+                Player2.increm = Skin(Player2.Char)[3]
+            }
                 Player2.lastpress = 'ENTER'
         }break;
 
@@ -250,7 +253,7 @@ window.addEventListener('keydown', (event) => {
                     Player2.velocity.y = -15
                 }else Player2.velocity.y = -20
                 console.log('true')
-                Player2.increm = 70
+                Player2.increm = Skin(Player2.Char)[3]
                 gravityaccy = 0.9
                 bool.sp.press = true
                 Player2.lastpress = '_'
@@ -288,13 +291,15 @@ window.addEventListener('keyup', (event) => {
         case 'w': {
             //jump
             if(!Player1.isattack){
-            Player1.increm = 70}
+            Player1.increm = Skin(Player1.Char)[3]
+        }
             bool.w.press = false
         }break;
 
         case 'a': {
             if(!Player1.isattack){
-            Player1.increm = 70}
+            Player1.increm = Skin(Player1.Char)[3]
+        }
             bool.a.press = false
             Player1.velocity.x = 0
             
@@ -306,7 +311,8 @@ window.addEventListener('keyup', (event) => {
 
         case 'd': {
             if(!Player1.isattack){
-            Player1.increm = 70}
+            Player1.increm = Skin(Player1.Char)[3]
+        }
             bool.d.press = false
             Player1.velocity.x = 0
             Player1.FramesMax = 8;
@@ -365,9 +371,21 @@ window.addEventListener('keyup', (event) => {
 let directory
 
 function igniter(meta, BGmetadata){
-    directory = meta
     Player1.directories = meta.P1
     Player2.directories = meta.P2
-    anim(meta)
     BGinit(BGmetadata)
+    setTimeout(() => {
+        anim(meta)
+    }, 500)
+    setTimeout(() => {
+
+        document.querySelector(".spinner").classList.add('spinner-hidden')
+        setTimeout(() => {
+            document.querySelector('.lodscr').classList.add('spinner-hidden')
+            isstarted = true
+            setTimeout(() => {
+                document.getElementById('load-scr').style.display = 'none'
+            }, 800)
+        },1000)
+    }, 2000)
 }
