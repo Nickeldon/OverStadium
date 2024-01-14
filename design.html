@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face { font-family: PixelifySans; src: url('./Addons/PixelifySans.ttf');}
+    </style>
+</head>
+<body style="background-color: black; width: 1024px;">
+    
+
+    <div class="main" style="display: block; position: absolute; top: 0; height: 200px; width: 1024px; align-items: center; justify-content: center     ;">
+
+        <div class="left-bar" id="left-bar" style="height: 100%;">
+            <div class="maincontent">
+                <div class="health-bar">
+                    <div class="health-left">
+                        
+                    </div>
+                </div>
+                <div class="side-left" style="float: left; height: 35px; width: 100%; vertical-align: middle; justify-content: center;">
+                    <p style="margin-left: 18px;">
+                        Player1
+                    </p>
+                    <div class="rounds-left" style="display: flex; position: absolute; top: 75%; right: 0;">
+                    <div class="rnds"></div>
+                    <div class="rnds" style="background-color: white;"></div>
+                    <div class="rnds" style="background-color: white;"></div>
+                    </div>
+                    
+                </div>
+            </div>
+           
+        </div>
+
+        <div class="middle" id="middle" style="height: 110px; width: 110px;">
+            <div class="timer" style="width: 100%; height: 100%; justify-content: center; align-items: center; vertical-align: middle; display: flex;">
+                <h1 style="text-align: center; font-family: PixelifySans, sans-serif; font-size: 40px; color: white;">
+                    94
+                </h1>
+            </div>
+        </div>
+
+        <div class="right-bar" id="right-bar" style="height: 100%;">
+           <div class="maincontent">
+            <div class="health-bar">
+                <div class="health-right">
+
+                </div>
+            </div>
+            <div class="side-right" style="float: right; height: 35px; width: 100%; vertical-align: middle; justify-content: center;">
+                <p style="float: right; position: relative; vertical-align: middle; margin-right: 20px;">
+                    Player2
+                </p>
+                <div class="rounds-right" style="display: flex; position: absolute; top: 75%; left: -10px;">
+                    <div class="rnds" style="background-color: white;"></div>
+                    <div class="rnds"></div>
+                    <div class="rnds"></div>
+                </div>
+            </div>
+           </div>
+        </div>
+
+    </div>
+
+</body>
+
+<style>
+h1{
+    font-weight: 900;
+    -webkit-text-stroke: 2px black; 
+}
+p{
+    color: white;
+    font-family: PixelifySans, sans-serif;
+}
+
+.rnds{
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(49, 49, 143);
+    margin-left: 10px;
+    border-width: 3px;
+    border-color: white;
+    border-style:double;
+}
+
+.health-left{
+    width: 80%;
+    height: 100%;
+    float: right;
+    position: relative;
+    border-radius: 15px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: white;
+}
+.health-right{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+    border-radius: 15px;
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.health-bar{
+    height: 50px;
+    width: 100%;
+    border-radius: 30px;
+    background-color: rgb(194, 82, 82);
+    position: relative;
+}
+
+.maincontent{
+    width: 100%;
+    position: absolute;
+    top: 30%;
+}   
+
+.left-bar{
+position: absolute;
+left: 0;
+top: 20px;
+width: 430px;
+}
+
+.middle{
+    justify-self: center;
+    position: absolute;
+    left: 44.3%;
+    top: 25%;
+    border-radius: 50%;
+    align-self: center;
+    background-color: rgb(49, 49, 143);
+    border-width: 5px;
+    border-style: solid;
+    border-color: silver;
+
+}
+
+.right-bar{
+right: 0;
+top: 20px;
+position: absolute;
+width: 430px;
+
+}
+
+
+</style>
+
+<script>
+
+
+</script>
+
+</html>

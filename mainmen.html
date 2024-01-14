@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" style="width: 1024px;">
+<html lang="en" style="width: 1000px;">
     <style>
         @font-face { font-family: PixelifySans; src: url('./Addons/PixelifySans.ttf');}
 </style>
 <head>
-    <meta name="viewport" content="width=1024px, initial-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=1000px, initial-scale=1.0,user-scalable=no">
 
     <meta charset="UTF-8" />
    
@@ -12,8 +12,9 @@
     <title>OVERFATE</title>
     
 </head>
-<body style="overflow: hidden;">
-    <div style="height: 100%; display: flex; top: 0; left: 0; width: 100%; background-color: gray; border-width: 5px; border-radius: 5px; border-style: solid;" id="main">
+<body style="width: 1015px; height: 565px;">
+    <audio src="./Addons/hover.mp3" id="hoveraudio"></audio>
+    <div style="height: 100%; display: flex; position: relative; width: 100%; background-color: gray; border-width: 5px; border-radius: 5px; border-color: white; border-style: solid;" id="main">
         <img src="./Addons/Background/gradient.png" alt="" style="width: 100%;">
         <div class="title">
             <h1 style="display: block;">OVERFATE</h1>
@@ -39,7 +40,9 @@
 
         <div class="optselect">
             <a onclick="parameters(1)">Show FPS: <span style="color: #8c8308;" id="fps-box">no</span></a>
-            <a onclick="parameters(2)" style="position: absolute;">Timer: <span style="color: #8c8308;" id="time-choice">100</span> <span style="color: #8c0808;" id="time-choice"> sec</span></a>
+            <a onclick="parameters(2)">Timer: <span style="color: #8c8308;" id="time-choice">100</span> <span style="color: #8c0808;" id="time-choice"> sec</span></a>
+            <a onclick="parameters(3)">Fullscreen mode: <span style="color: #8c8308;" id="fs-toggle">no</span></a>
+            <a onclick="parameters(4)">Number of rounds: <span style="color: #8c8308;" id="round-choice">1</span></a>
             
         </div>
         </div>
@@ -160,6 +163,41 @@ function StopSound(soundobj) {
                 }break;
             }
         }
+        else if(num === 3){
+            var el = document.getElementById("main");
+            var Fullscreen = document.getElementById('fs-toggle').innerText
+            switch(Fullscreen){
+                case 'yes': {
+                    document.getElementById('fs-toggle').innerText = 'no'
+                    if (document.fullscreenElement) {
+                    // exitFullscreen is only available on the Document object.
+                    document.exitFullscreen();
+                    }
+                }break;
+                case 'no': {
+                    document.getElementById('fs-toggle').innerText = 'yes'
+                    if (!document.fullscreenElement) {
+                        el.requestFullscreen();
+                    } else {
+                    
+                    }
+                }break;
+            }
+        }
+        else if(num === 4){
+            var choice = document.getElementById("round-choice").innerText
+            switch(choice){
+                case '1': {
+                    document.getElementById("round-choice").innerText = '2'
+                }break;
+                case '2': {
+                    document.getElementById("round-choice").innerText = '3'
+                }break;
+                case '3': {
+                    document.getElementById("round-choice").innerText = '1'
+                }break;
+            }
+        }   
     }
     
     function redirect(num){
@@ -173,6 +211,8 @@ function StopSound(soundobj) {
         var Options = {
             showFPS: document.getElementById('fps-box').innerHTML,
             Timer: document.getElementById('time-choice').innerText,
+            Fullscreen: document.getElementById('fs-toggle').innerText,
+            Rounds: document.getElementById("round-choice").innerText
         }
         Options = JSON.stringify(Options)
         setTimeout(() => {

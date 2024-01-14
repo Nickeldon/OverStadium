@@ -24,7 +24,6 @@ function createWindow(){
   windowObj.on('closed', () => {
     windowObj = null
   })
-
 }
 
 app.on('window-all-closed', () => {
