@@ -1,6 +1,10 @@
 var urlParams = new URLSearchParams(window.location.search);
 var options = urlParams.get('options');
 var selectedbg;
+var el = document.getElementById('main')
+if(JSON.parse(localStorage.getItem("options")).Fullscreen === 'yes'){
+    document.getElementById('main').classList.add('zoom')
+}
 
 var loader = new PxLoader()
 const directory = {
@@ -176,8 +180,15 @@ function Bridge(path){
                         }}
                         json = JSON.stringify(json)
                             setTimeout(() => {
-                                window.location.href = 'index.html?choice=' + json + '&options=' + options
+                                window.location.href = 'index.html?choice=' + json
                             }, 1000)
+                        let wins = {
+                            PL1: 0,
+                            PL2: 0
+                        }
+
+                        
+                        localStorage.setItem("wins", JSON.stringify(wins))
                             // Handle the response as needed
                 }break;
 

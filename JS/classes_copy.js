@@ -1,6 +1,7 @@
 let intervals = 100
 let count = 0;
 let framecnt = 0;
+var action
 class Fighter{
     constructor({position, velocity, lastpress, AttackBoxcolor, HP, width, height, imageSRC, FramesMax, isattack, increm, canattack, lastattack, iscombo, Framescount, Char, jump, ivalue, hit, fall, rotate, directories}){
         this.position = position
@@ -34,15 +35,13 @@ class Fighter{
     }
 
     draw(){
-        if(Player1.Char === 'PL3' && Player1.velocity.x !== 0 && !Player1.isattack && !Player1.hit){
-            Player1.jump = 161.5
-        }
+        console.log(Player2.image)
         var metadata = Skin(this.Char)
         var incy = metadata[5];
         var offset = metadata[6];
         if(this.hit){
             this.image = this.directories.hit
-            console.log(this.image)
+            //console.log(this.image)
             this.FramesMax = metadata[1].hit
             this.jump = metadata[4]
             this.ivalue = metadata[3]
@@ -73,7 +72,7 @@ class Fighter{
                 this.ivalue = metadata[3]
                 this.canattack = false;
                 this.lastattack = undefined
-                console.log(this.image)
+               // console.log(this.image)
                 if(this.Framescount >= this.FramesMax){
                     this.lastattack = Date.now()
                     this.Framescount = 0;
@@ -139,6 +138,19 @@ class Fighter{
     }
 
     updat(){
+        /*if(this.velocity.x !== 0 && this.velocity.y === 0){
+            action = 'run'
+        }
+        else if(this.velocity.x === 0 && this.velocity.y === 0){
+            action = 'idle'
+        }*/
+
+        switch(this.velocity.x, this.velocity.y){
+            case 0, !0 : {
+                console.log('yesyesyesyesyyey')
+            }break;
+        }
+        
         this.draw()
         if(isfinishedT){
             gravityaccx = 0;

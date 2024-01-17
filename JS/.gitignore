@@ -1,0 +1,8 @@
+# Node modules
+node_modules
+
+# Sublime project
+*.sublime-*
+
+# DS_Store
+.DS_Store

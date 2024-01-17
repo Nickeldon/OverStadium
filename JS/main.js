@@ -150,8 +150,7 @@ directories: null
 //KEY HANDLERS 
 var Lastrelease = 0
 window.addEventListener('keydown', (event) => {
-    
-    if(!isfinishedT && !isfinishedP && !ispaused){
+    if(!isfinishedT && !isfinishedP && !ispaused && isstarted){
     if(event.key.length === 1){
         key = event.key.toLowerCase()}
         else{
@@ -261,11 +260,42 @@ window.addEventListener('keydown', (event) => {
             
         }break;
 
+        case 'ArrowUp' :{
+            if(jumpcount2 >= 2 && Player2.velocity.y === 0) jumpcount2 = 0
+            if(jumpcount2 < 2 || Player2.velocity.y === 0){
+                jumpcount2++
+            if(Player2.position.y >= 0){
+                if(Player2.velocity.y !== 0){
+                    Player2.velocity.y = -15
+                }else Player2.velocity.y = -20
+                console.log('true')
+                Player2.increm = Skin(Player2.Char)[3]
+                gravityaccy = 0.9
+                bool.sp.press = true
+                Player2.lastpress = '_'
+                }}
+            
+        }break;
+
         case 'Escape': {
             if(document.getElementById('pause').style.display !== 'block'){
             document.getElementById('pause').style.display = 'block';
             ispaused = true}
-        }
+        }break;
+        /*case 'F11': {
+            var iscale = window.innerWidth
+            console.log(iscale)
+            if(iscale <= 1142){
+                document.body.style.transform = 'scale(1.5)'
+                window.innerHeight *= 2
+                window.innerWidth *= 2
+            }
+            else{
+                //document.body.style.transform = 'scale(1)'
+                window.innerHeight /= 2
+                window.innerWidth /= 2
+            }
+        }*/
 
         default: {
             console.log('incorrect event')
@@ -362,6 +392,9 @@ window.addEventListener('keyup', (event) => {
         case ' ': {
             bool.sp.press = false
         }break;
+        case 'ArrowUp': {
+            bool.sp.press = false
+        }break;
         default: {
             console.log('incorrect event')
         }break
@@ -369,7 +402,7 @@ window.addEventListener('keyup', (event) => {
 })
 
 let directory
-
+addEventListener("fullscreenchange", (event) => {console.log('yesyeysyesyeysyey')});
 function igniter(meta, BGmetadata){
     Player1.directories = meta.P1
     Player2.directories = meta.P2

@@ -14,7 +14,7 @@
 </head>
 <body style="width: 1015px; height: 565px;">
     <audio src="./Addons/hover.mp3" id="hoveraudio"></audio>
-    <div style="height: 100%; display: flex; position: relative; width: 100%; background-color: gray; border-width: 5px; border-radius: 5px; border-color: white; border-style: solid;" id="main">
+    <div style="height: 100%; display: flex; position: relative; width: 100%; margin: 0; background-color: gray; top: 0; left: 0;" id="main">
         <img src="./Addons/Background/gradient.png" alt="" style="width: 100%;">
         <div class="title">
             <h1 style="display: block;">OVERFATE</h1>
@@ -43,8 +43,10 @@
             <a onclick="parameters(2)">Timer: <span style="color: #8c8308;" id="time-choice">100</span> <span style="color: #8c0808;" id="time-choice"> sec</span></a>
             <a onclick="parameters(3)">Fullscreen mode: <span style="color: #8c8308;" id="fs-toggle">no</span></a>
             <a onclick="parameters(4)">Number of rounds: <span style="color: #8c8308;" id="round-choice">1</span></a>
+            <a onclick="parameters(5)" style="color:#8c0808;">Clear LocalStorage</a>
             
         </div>
+       
         </div>
         <div class="sp-thanks" id="sp-thanks" style="display: none; position: absolute; width: 100%; height: 100%; background-color: rgb(46, 34, 34); top: 0;">
         
@@ -69,8 +71,13 @@
         </div>
             </div>
         </div>
-        <div id="transition" class="tr" style="display: none; position: absolute; top: 0; width: 100%; height: 100%; background-color: transparent;"></div>
+        <div class="notification" id="notification" style="display: none; width: 250px; height: 60px; position: absolute; bottom: 0; right: 0; border-radius: 5px; border-width: 3px; border-style: solid; border-color: rgb(97, 19, 19); background-color: rgb(46, 34, 34); transition: all 1s ease-out; animation: notification 1.5s ease-out;">
+            <h3 style="color: #8c8308; vertical-align: middle; text-align: center; font-family: PixelifySans, sans-serif;">
+                Sucess
+            </h3>
+        </div>
 
+        <div id="transition" class="tr" style="display: none; position: absolute; top: 0; width: 100%; height: 100%; background-color: transparent;"></div>        
     </div>
     
     
@@ -78,6 +85,14 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+    var metadata = new URLSearchParams(window.location.search);
+    try{
+    var optmeta = JSON.parse(metadata.get('options'))
+    if(optmeta.Fullscreen === 'yes'){
+        document.getElementById('main').classList.add('zoom')
+    }}catch(e){
+
+    }
     $("#selection a") // loop each menu item
   .each(function(i) {
     if (i != 0) { // only clone if more than one needed
@@ -95,6 +110,17 @@ $("#selectaudio").attr("id", "beep-0"); // get first one into naming convention
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
 <script>
+    options = JSON.parse(localStorage.getItem("options"))
+    if(JSON.parse(localStorage.getItem("options")).Fullscreen === 'yes'){
+    document.getElementById('main').classList.add('zoom');
+    document.getElementById('fs-toggle').innerText = 'yes'
+    }
+
+    document.getElementById('fps-box').innerHTML = options.showFPS
+    document.getElementById('time-choice').innerText = options.Timer
+    document.getElementById('fs-toggle').innerText = options.Fullscreen
+    document.getElementById("round-choice").innerText = options.Rounds
+
     document.querySelector('h4').style.color = '#8c8308'
     setInterval(() => {
         if(document.getElementById('sp-thanks').style.display !== 'none'){
@@ -169,18 +195,38 @@ function StopSound(soundobj) {
             switch(Fullscreen){
                 case 'yes': {
                     document.getElementById('fs-toggle').innerText = 'no'
-                    if (document.fullscreenElement) {
+                    /*if (document.fullscreenElement) {
                     // exitFullscreen is only available on the Document object.
                     document.exitFullscreen();
+                    }*/
+                    document.getElementById('main').classList.add('unzoom')
+                    try{
+                        document.getElementById('main').classList.remove('zoom')
+                    }catch(e){
+                        
                     }
                 }break;
                 case 'no': {
                     document.getElementById('fs-toggle').innerText = 'yes'
-                    if (!document.fullscreenElement) {
+                    /*if (!document.fullscreenElement) {
                         el.requestFullscreen();
                     } else {
                     
+                    }*/
+                    try{
+                        document.getElementById('main').classList.remove('unzoom')
+                    }catch(e){
+                        
                     }
+                    document.getElementById('main').classList.add('zoom')
+                    el.dispatchEvent(new Event('keypress', {keyCode: 'F11'}))
+                    $(() => {
+                        var e = $.Event('keypress');
+                        e.which = 27; // Character 'A'
+                        $('item').trigger(e);
+                    });
+
+                    
                 }break;
             }
         }
@@ -198,6 +244,28 @@ function StopSound(soundobj) {
                 }break;
             }
         }   
+        else if(num === 5){
+            localStorage.clear()
+            document.getElementById('fps-box').innerHTML = options.showFPS = 'no'
+            document.getElementById('time-choice').innerText = options.Timer = 100
+            document.getElementById("round-choice").innerText = options.Rounds = 1
+            localStorage.setItem("wins", JSON.stringify({PL1: 0, PL2: 0}))
+            /*localStorage.setItem("options", JSON.stringify({
+                FS: null,
+                Rounds: null,
+                showFPS: null,
+                Timer: 100
+            }))*/
+            document.getElementById('notification').style.display = 'block'
+
+            setTimeout(() => {
+                document.getElementById('notification').style.opacity = '0%'
+                setTimeout(() => {
+                document.getElementById('notification').style.display = 'none'
+                document.getElementById('notification').style.opacity = '100%'
+                },1000)
+            }, 2500)
+        }
     }
     
     function redirect(num){
@@ -215,8 +283,9 @@ function StopSound(soundobj) {
             Rounds: document.getElementById("round-choice").innerText
         }
         Options = JSON.stringify(Options)
+        localStorage.setItem("options", Options)
         setTimeout(() => {
-            window.location.href = './charsel.html?options=' + Options
+            window.location.href = './charsel.html'
         },1000)
     }
     else if(num === 3){
@@ -246,6 +315,8 @@ function StopSound(soundobj) {
             }
         }
     }
-
+    window.addEventListener('keypress', (event) => {
+                        console.log(event)
+                    })
 </script>
 </html>

@@ -9,11 +9,18 @@ const msPerFrame = 1000 / fpslim
 var TO_RADIANS = Math.PI/180; 
 var isstarted = false
 
+
 function RESTART(){
     window.location.reload()
 }
 
 function GMOhandler(winner){
+    var options = JSON.parse(localStorage.getItem("options"))
+    var maxwin = Number(options.Rounds)
+    var PL1wins = localStorage.wins.PL1
+    var PL1wins = localStorage.wins.PL2
+    var wins = JSON.parse(localStorage.getItem("wins"))
+
     intervals = 20;
     if(Player1.velocity.x !== 0) Player1.velocity.x = 0.01
     if(Player1.velocity.y !== 0){
@@ -23,8 +30,9 @@ function GMOhandler(winner){
     if(Player2.velocity.y !== 0){
             Player2.velocity.y = Player2.velocity.y / 5
     }
-    document.getElementById('GameOverScreen').style.display = 'block'
 
+    document.getElementById('GameOverScreen').style.display = 'block'
+    
     let cntpos1 = 0
     let cntpos2 = 0
     setInterval(() => {
@@ -39,14 +47,17 @@ function GMOhandler(winner){
     }
     }, 0.01)
     if(winner === 'PL1'){
+        wins.PL1 += 1
         document.getElementById('GMOBASETXT').style.color = '#6e71cc'
         document.getElementById('PLWIN').innerHTML = 'Player 1'
     }
     else{
+        wins.PL2 += 1
         document.getElementById('GMOBASETXT').style.color = 'red'
         document.getElementById('PLWIN').innerHTML = 'Player 2'
     }
     
+    localStorage.setItem("wins", JSON.stringify(wins))
 }
 
 function redirect(num, additional){
@@ -62,6 +73,7 @@ function redirect(num, additional){
 
         }break;
         case 4 : {
+            var options = JSON.parse(localStorage.getItem("options"));
             document.getElementById('transition').style.display = 'block'
             document.getElementById('transition').style.backgroundColor = 'black'
             setTimeout(() => {
@@ -70,13 +82,13 @@ function redirect(num, additional){
         }break;
 
         case 5 : {
-            //CHANGE CHARACTER   
-            var options = urlParams.get('options');
+            //CHANGE CHARACTER
             document.getElementById('transition').style.display = 'block'
             document.getElementById('transition').style.backgroundColor = 'black'
             document.getElementById('transition').style.opacity = '100%'
+            document.getElementById('main').style.display = 'none'
             setTimeout(() => {
-                window.location.href = './charsel.html?options='+options
+                window.location.href = './charsel.html'
             }, 1000)
 
         }break;
@@ -134,10 +146,13 @@ function refreshLoop() {
       document.getElementById('isfps').innerHTML = `${fps}`
       if(fps >= 90){
         initialpos++
-        document.getElementById('fps-al').style.display = 'flex';
+        //document.getElementById('fps-al').style.display = 'flex';
         if(initialpos <= 0){
-        document.getElementById('fps-al').style.top = `${initialpos}px`;}
-        else if(initialpos > 900){document.getElementById('fps-al').style.opacity = '0%';}
+        //document.getElementById('fps-al').style.top = `${initialpos}px`;
+    }
+        else if(initialpos > 900){
+            //document.getElementById('fps-al').style.opacity = '0%';
+        }
         
       }
       refreshLoop();
@@ -282,12 +297,10 @@ function Skin(char){
     offsety = 0
 }break;
     default: {
-        char = null;
+        //char = null;
+        console.error('fatal error')
     }
     }
-    
-
-    if(char){
         image = {
             attack: `./Addons/Sprites/${char}/Attack1.png`,
             cmb1: `./Addons/Sprites/${char}/Attack2.png`,
@@ -297,8 +310,6 @@ function Skin(char){
             run: `./Addons/Sprites/${char}/Run.png`,
             hit: `./Addons/Sprites/${char}/Take hit.png`
         }
-    }
-
 return [image, Frames, inc, ival, jumping, yi, offsety, atkframe]
 }
 
@@ -405,7 +416,7 @@ function anim(meta){
                         Player2.fall.x = 9} else Player2.fall.x = -9
                 }
                 if(Player2.HP <= 30){
-                    document.getElementById('ri').style.backgroundColor = 'rgb(130, 16, 16)'
+                    document.getElementById('ri').style.animation = 'low-health 0.75s ease infinite'
                 }
                 //console.log('PLAYER 2 TOUCHED HP REMAINING: ', Player2.HP)
             }
@@ -454,13 +465,12 @@ function anim(meta){
                         Player1.fall.x = 9} else Player1.fall.x = -9
                 }
                 if(Player1.HP <= 30){
-                    document.getElementById('le').style.backgroundColor = 'rgb(130, 16, 16)'
+                    document.getElementById('le').style.animation = 'low-health 0.75s ease infinite'
                 }
                 //console.log('PLAYER 1 TOUCHED HP REMAINING: ', Player1.HP)
             }
                 else{
                     Player1.HP = 0
-                    console.log('PLAYER 1 IS DEAD; HP REMAINING: ', Player1.HP)
                     if(alertcounter === 0){
                         GMOhandler('PL2')
                         }
