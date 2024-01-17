@@ -3,14 +3,14 @@ const {app, BrowserWindow} = electron
 const url = require('url')
 const path = require('path')
 
-//require('electron-reload')(__dirname,{electron: path.join(__dirname, 'node_modules', '.bin', 'electron')})
+require('electron-reload')(__dirname,{electron: path.join(__dirname, 'node_modules', '.bin', 'electron')})
 
 let windowObj = null
 
 function createWindow(){
   windowObj = new BrowserWindow({
-    width: 1050,
-    height: 617,
+    width: 1015,
+    height: 590,
     alwaysOnTop: false,
     maximizable: false,
     minimizable: false,
