@@ -11,8 +11,8 @@
         @font-face { font-family: PixelifySans; src: url('./Addons/PixelifySans.ttf');}
       </style>
 </head>
-<body style="background-color: black; width: 100%; height: 100%; position: absolute; overflow:hidden; top: 0; left: 0;">
-    <div id="main" style="height: 576px; width: 1024px; background-color: black; display: block; position: absolute; border-style: solid; top: 0; left: 0; border-radius: 5px;">
+<body style="background-color: black; width: 100%; height: 100%; position: relative; overflow:hidden; top: 0; left: 0; margin: 0;">
+    <div id="main" style="height: 576px; width: 1024px; background-color: black; display: block; position: relative; top: 0; left: 0; margin: 0;">
         <h1 style="display: block; position: absolute; width: 100%; align-self:start; font-size: 60px; color: white;">CHOOSE YOUR OVERFATE</h1>
 
         <div class="selector" id="sel" style="position: absolute; width: 100%; top:75%; align-items: center; justify-content: center;display: flex; display: flex;">
@@ -49,7 +49,7 @@
             </a>
           </div>
 
-        <canvas height="576" width="1024" style="">
+        <canvas height="576" width="1024" style="margin: 0; left: 0;">
 
         </canvas>
 
@@ -123,6 +123,10 @@
     
     
     <style>
+        .zoom {
+        transform: scale(1.51);
+        transform-origin: 0 0;
+    }
          .spinner{
             height: 40px;
             width: 40px;
